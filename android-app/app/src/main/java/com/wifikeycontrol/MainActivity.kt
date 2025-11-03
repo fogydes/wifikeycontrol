@@ -365,9 +365,12 @@ class MainActivity : AppCompatActivity() {
         logsTextView.append(logEntry)
 
         // Auto-scroll to bottom
-        val scrollAmount = logsTextView.layout?.getLineTop(logsTextView.lineCount) - logsTextView.height
-        if (scrollAmount > 0) {
-            logsTextView.scrollTo(0, scrollAmount)
+        val layout = logsTextView.layout
+        if (layout != null) {
+            val scrollAmount = layout.getLineTop(logsTextView.lineCount) - logsTextView.height
+            if (scrollAmount > 0) {
+                logsTextView.scrollTo(0, scrollAmount)
+            }
         }
 
         Log.d(TAG, "Log: $message")
