@@ -5,6 +5,7 @@ import android.inputmethodservice.KeyboardView
 import android.view.KeyEvent
 import android.view.View
 import android.view.inputmethod.InputConnection
+import android.view.inputmethod.EditorInfo
 import android.util.Log
 import android.content.BroadcastReceiver
 import android.content.Intent
