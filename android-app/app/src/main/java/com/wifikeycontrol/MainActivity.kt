@@ -69,7 +69,12 @@ class MainActivity : AppCompatActivity() {
         setupEventListeners()
 
         // Register for connection status updates
-        registerReceiver(connectionStatusReceiver, IntentFilter(ConnectionService.ACTION_CONNECTION_STATUS_CHANGED))
+        ContextCompat.registerReceiver(
+            this,
+            connectionStatusReceiver,
+            IntentFilter(ConnectionService.ACTION_CONNECTION_STATUS_CHANGED),
+            ContextCompat.RECEIVER_NOT_EXPORTED
+        )
 
         // Check and request permissions
         checkPermissions()
