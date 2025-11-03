@@ -1,0 +1,29 @@
+# WiFi Key Control PC Application Dependencies
+
+# GUI Framework
+PyQt5==5.15.10
+
+# Input Capture
+pynput==1.7.6
+
+# Screen Information
+screeninfo==0.8
+
+# System Integration
+psutil==5.9.5
+
+# Network and Discovery
+socket
+threading
+json
+struct
+hashlib
+zlib
+time
+
+# Development and Testing (optional)
+pytest==7.4.3
+pytest-qt==4.2.0
+
+# Packaging (optional)
+PyInstaller==5.13.2
