@@ -246,7 +246,7 @@ class KeyboardService : InputMethodService() {
             connection.deleteSurroundingText(1, 0)
             Log.d(TAG, "Sent delete")
         } catch (e: Exception) {
-            Log.e(TAG, "Error sending delete: ${e.method}")
+            Log.e(TAG, "Error sending delete: ${e.message}")
         }
     }
 
