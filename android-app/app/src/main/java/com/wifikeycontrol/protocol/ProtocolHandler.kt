@@ -314,7 +314,7 @@ class ProtocolHandler {
             put("timestamp", timestamp)
         }
 
-        return createJsonPacket(json.toString().toByteArray().map { it.toInt() }.toIntArray())
+        return createJsonPacket(json.toString().toByteArray())
     }
 
     private fun createHeartbeatResponsePacket(timestamp: Long): ByteArray {
@@ -323,7 +323,7 @@ class ProtocolHandler {
             put("timestamp", timestamp)
         }
 
-        return createJsonPacket(json.toString().toByteArray().map { it.toInt() }.toIntArray())
+        return createJsonPacket(json.toString().toByteArray())
     }
 
     private fun createControlReturnPacket(eventData: Map<String, Any>, timestamp: Long): ByteArray {
@@ -332,7 +332,7 @@ class ProtocolHandler {
             put("timestamp", timestamp)
         }
 
-        return createJsonPacket(json.toString().toByteArray().map { it.toInt() }.toIntArray())
+        return createJsonPacket(json.toString().toByteArray())
     }
 
     private fun createJsonPacket(data: ByteArray): ByteArray {
