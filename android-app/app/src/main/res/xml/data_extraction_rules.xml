@@ -5,13 +5,13 @@
         <include domain="sharedpref" path="app_settings.xml" />
 
         <!-- Exclude sensitive connection data -->
-        <exclude domain="sharedpref" path="connection_prefs.xml" />
-        <exclude domain="database" path="trusted_devices.db" />
+        <!-- <exclude domain="sharedpref" path="connection_prefs.xml" /> -->
+        <!-- <exclude domain="database" path="trusted_devices.db" /> -->
     </cloud-backup>
 
     <device-transfer>
         <!-- Include all settings for device transfer -->
         <include domain="sharedpref" path="." />
-        <exclude domain="database" path="trusted_devices.db" />
+        <!-- <exclude domain="database" path="trusted_devices.db" /> -->
     </device-transfer>
 </data-extraction-rules>
