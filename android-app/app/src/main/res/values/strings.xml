@@ -1,0 +1,60 @@
+<resources>
+    <string name="app_name">WiFi Key Control</string>
+    <string name="accessibility_service_description">Allows WiFi Key Control to simulate touch input and gestures on your device when connected to a PC.</string>
+    <string name="input_method_description">WiFi Key Control virtual keyboard for typing from PC.</string>
+
+    <!-- Main Activity -->
+    <string name="connection_status">Connection Status</string>
+    <string name="disconnected">Disconnected</string>
+    <string name="connected">Connected</string>
+    <string name="connecting">Connecting...</string>
+    <string name="server_ip">Server IP</string>
+    <string name="server_port">Server Port</string>
+    <string name="connect">Connect</string>
+    <string name="disconnect">Disconnect</string>
+    <string name="start_service">Start Service</string>
+    <string name="stop_service">Stop Service</string>
+    <string name="settings">Settings</string>
+
+    <!-- Connection Service -->
+    <string name="service_channel_name">WiFi Key Control</string>
+    <string name="service_channel_description">Connection service for PC input control</string>
+    <string name="notification_connected">Connected to PC</string>
+    <string name="notification_disconnected">Disconnected from PC</string>
+    <string name="notification_connecting">Connecting to PC...</string>
+
+    <!-- Settings -->
+    <string name="auto_connect">Auto-connect</string>
+    <string name="auto_start">Start on boot</string>
+    <string name="keep_alive">Keep service alive</string>
+    <string name="battery_optimization">Disable battery optimization</string>
+
+    <!-- Permissions -->
+    <string name="accessibility_permission_title">Accessibility Permission Required</string>
+    <string name="accessibility_permission_message">WiFi Key Control needs accessibility permission to simulate touch input. Please enable it in settings.</string>
+    <string name="go_to_settings">Go to Settings</string>
+    <string name="cancel">Cancel</string>
+
+    <string name="keyboard_permission_title">Keyboard Permission Required</string>
+    <string name="keyboard_permission_message">WiFi Key Control needs to be enabled as a keyboard to simulate typing. Please enable it in settings.</string>
+
+    <string name="overlay_permission_title">Overlay Permission Required</string>
+    <string name="overlay_permission_message">WiFi Key Control needs overlay permission to display control status. Please enable it in settings.</string>
+
+    <!-- Error messages -->
+    <string name="error_connection_failed">Connection failed. Please check IP and port.</string>
+    <string name="error_invalid_ip">Invalid IP address</string>
+    <string name="error_service_running">Service is already running</string>
+    <string name="error_service_not_running">Service is not running</string>
+
+    <!-- Success messages -->
+    <string name="connected_successfully">Connected successfully</string>
+    <string name="disconnected_successfully">Disconnected successfully</string>
+    <string name="service_started">Service started</string>
+    <string name="service_stopped">Service stopped</string>
+
+    <!-- Other -->
+    <string name="default_server_ip">192.168.1.100</string>
+    <string name="default_server_port">12346</string>
+    <string name="version">Version 1.0</string>
+</resources>
