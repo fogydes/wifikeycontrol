@@ -281,20 +281,5 @@ class KeyboardService : InputMethodService() {
         return inputConnection != null
     }
 
-    inner class MyInputMethodSession : AbstractInputMethodService.AbstractInputMethodSessionImpl() {
-        override fun onFinishInput() {
-            super.onFinishInput()
-            Log.d(TAG, "Input session finished")
-        }
-
-        override fun updateCursor(newCursor: android.view.inputmethod.ExtractedText?) {
-            super.updateCursor(newCursor)
-            Log.d(TAG, "Cursor updated")
-        }
-
-        override fun updateSelection(oldSelStart: Int, oldSelEnd: Int, newSelStart: Int, newSelEnd: Int, candidatesStart: Int, candidatesEnd: Int) {
-            super.updateSelection(oldSelStart, oldSelEnd, newSelStart, newSelEnd, candidatesStart, candidatesEnd)
-            Log.d(TAG, "Selection updated: $newSelStart-$newSelEnd")
-        }
-    }
+    // Input session handling is now done through standard lifecycle methods
 }
