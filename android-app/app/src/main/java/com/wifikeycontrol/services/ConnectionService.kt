@@ -86,7 +86,7 @@ class ConnectionService : Service() {
 
         // Initialize system services
         notificationManager = getSystemService(Context.NOTIFICATION_SERVICE) as NotificationManager
-        connectivityManager = getSystemService(Context.CONNECTIVITY_SERVICE) as ConnectivityManagerManager
+        connectivityManager = getSystemService(Context.CONNECTIVITY_SERVICE) as ConnectivityManager
 
         // Get device name
         deviceName = "${Build.MANUFACTURER} ${Build.MODEL}"
