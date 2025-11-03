@@ -13,6 +13,9 @@ import org.json.JSONObject
 import java.io.*
 import java.net.*
 import java.util.concurrent.atomic.AtomicBoolean
+import com.wifikeycontrol.R
+import com.wifikeycontrol.protocol.ProtocolHandler
+import android.os.Bundle
 
 class ConnectionService : Service() {
 
