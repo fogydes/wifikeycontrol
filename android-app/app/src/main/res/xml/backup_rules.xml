@@ -5,5 +5,5 @@
 
     <!-- Exclude sensitive data -->
     <exclude domain="sharedpref" path="device_key.xml" />
-    <exclude domain="database" path="trusted_devices.db" />
+    <!-- <exclude domain="database" path="trusted_devices.db" /> -->
 </full-backup-content>
