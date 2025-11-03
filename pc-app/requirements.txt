@@ -12,14 +12,8 @@ screeninfo==0.8
 # System Integration
 psutil==5.9.5
 
-# Network and Discovery
-socket
-threading
-json
-struct
-hashlib
-zlib
-time
+# Note: socket, threading, json, struct, hashlib, zlib, time are built-in Python modules
+# and don't need to be installed via pip
 
 # Development and Testing (optional)
 pytest==7.4.3
