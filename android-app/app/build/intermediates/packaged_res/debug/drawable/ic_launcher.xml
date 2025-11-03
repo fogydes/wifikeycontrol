@@ -1,0 +1,38 @@
+<?xml version="1.0" encoding="utf-8"?>
+<vector xmlns:android="http://schemas.android.com/apk/res/android"
+    android:width="108dp"
+    android:height="108dp"
+    android:viewportWidth="108"
+    android:viewportHeight="108">
+
+    <!-- Background circle -->
+    <path
+        android:fillColor="@color/md_theme_light_primary"
+        android:pathData="M54,54 m-48,0 a48,48 0 1,1 96,0 a48,48 0 1,1 -96,0" />
+
+    <!-- WiFi symbol -->
+    <path
+        android:fillColor="@android:color/white"
+        android:pathData="M54,35 L54,35 A19,19 0 0,1 73,54 L73,54 A19,19 0 0,1 54,73 L54,73 A19,19 0 0,1 35,54 L35,54 A19,19 0 0,1 54,35 z" />
+
+    <!-- Center dot -->
+    <path
+        android:fillColor="@android:color/white"
+        android:pathData="M54,50 m-4,0 a4,4 0 1,1 8,0 a4,4 0 1,1 -8,0" />
+
+    <!-- WiFi waves -->
+    <path
+        android:fillColor="@android:color/white"
+        android:strokeColor="@android:color/white"
+        android:strokeWidth="2"
+        android:fillAlpha="0.3"
+        android:pathData="M35,42 Q54,30 73,42" />
+
+    <path
+        android:fillColor="@android:color/white"
+        android:strokeColor="@android:color/white"
+        android:strokeWidth="2"
+        android:fillAlpha="0.5"
+        android:pathData="M40,47 Q54,38 68,47" />
+
+</vector>

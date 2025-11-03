@@ -1,0 +1,46 @@
+[
+    {
+        "merged": "com.wifikeycontrol.app-debug-39:/layout_activity_main.xml.flat",
+        "source": "com.wifikeycontrol.app-main-41:/layout/activity_main.xml"
+    },
+    {
+        "merged": "com.wifikeycontrol.app-debug-39:/layout_control_overlay.xml.flat",
+        "source": "com.wifikeycontrol.app-main-41:/layout/control_overlay.xml"
+    },
+    {
+        "merged": "com.wifikeycontrol.app-debug-39:/drawable_ic_launcher_round.xml.flat",
+        "source": "com.wifikeycontrol.app-main-41:/drawable/ic_launcher_round.xml"
+    },
+    {
+        "merged": "com.wifikeycontrol.app-debug-39:/xml_file_paths.xml.flat",
+        "source": "com.wifikeycontrol.app-main-41:/xml/file_paths.xml"
+    },
+    {
+        "merged": "com.wifikeycontrol.app-debug-39:/xml_data_extraction_rules.xml.flat",
+        "source": "com.wifikeycontrol.app-main-41:/xml/data_extraction_rules.xml"
+    },
+    {
+        "merged": "com.wifikeycontrol.app-debug-39:/layout_activity_settings.xml.flat",
+        "source": "com.wifikeycontrol.app-main-41:/layout/activity_settings.xml"
+    },
+    {
+        "merged": "com.wifikeycontrol.app-debug-39:/xml_input_method_config.xml.flat",
+        "source": "com.wifikeycontrol.app-main-41:/xml/input_method_config.xml"
+    },
+    {
+        "merged": "com.wifikeycontrol.app-debug-39:/drawable_circle_indicator.xml.flat",
+        "source": "com.wifikeycontrol.app-main-41:/drawable/circle_indicator.xml"
+    },
+    {
+        "merged": "com.wifikeycontrol.app-debug-39:/drawable_ic_launcher.xml.flat",
+        "source": "com.wifikeycontrol.app-main-41:/drawable/ic_launcher.xml"
+    },
+    {
+        "merged": "com.wifikeycontrol.app-debug-39:/xml_backup_rules.xml.flat",
+        "source": "com.wifikeycontrol.app-main-41:/xml/backup_rules.xml"
+    },
+    {
+        "merged": "com.wifikeycontrol.app-debug-39:/xml_accessibility_service_config.xml.flat",
+        "source": "com.wifikeycontrol.app-main-41:/xml/accessibility_service_config.xml"
+    }
+]

@@ -11,6 +11,8 @@
     <!-- Foreground service and notification permissions -->
     <uses-permission android:name="android.permission.FOREGROUND_SERVICE" />
     <uses-permission android:name="android.permission.POST_NOTIFICATIONS" />
+    <uses-permission android:name="android.permission.FOREGROUND_SERVICE_DATA_SYNC" />
+
 
     <!-- Note: BIND_ACCESSIBILITY_SERVICE and BIND_INPUT_METHOD permissions
      are granted through service declarations, not uses-permission tags -->

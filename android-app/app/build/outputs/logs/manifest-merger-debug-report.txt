@@ -1,0 +1,538 @@
+-- Merging decision tree log ---
+provider#androidx.core.content.FileProvider
+INJECTED from /home/fogy/wifikeycontrol/android-app/app/src/main/AndroidManifest.xml:136:9-144:20
+	android:grantUriPermissions
+		ADDED from /home/fogy/wifikeycontrol/android-app/app/src/main/AndroidManifest.xml:140:13-47
+	android:authorities
+		INJECTED from /home/fogy/wifikeycontrol/android-app/app/src/main/AndroidManifest.xml
+		ADDED from /home/fogy/wifikeycontrol/android-app/app/src/main/AndroidManifest.xml:138:13-64
+	android:exported
+		ADDED from /home/fogy/wifikeycontrol/android-app/app/src/main/AndroidManifest.xml:139:13-37
+	android:name
+		ADDED from /home/fogy/wifikeycontrol/android-app/app/src/main/AndroidManifest.xml:137:13-62
+manifest
+ADDED from /home/fogy/wifikeycontrol/android-app/app/src/main/AndroidManifest.xml:2:1-163:12
+INJECTED from /home/fogy/wifikeycontrol/android-app/app/src/main/AndroidManifest.xml:2:1-163:12
+INJECTED from /home/fogy/wifikeycontrol/android-app/app/src/main/AndroidManifest.xml:2:1-163:12
+INJECTED from /home/fogy/wifikeycontrol/android-app/app/src/main/AndroidManifest.xml:2:1-163:12
+MERGED from [androidx.databinding:viewbinding:8.13.0] /home/fogy/.gradle/caches/8.13/transforms/4d3935665078b290a5ac822bc1550d2b/transformed/viewbinding-8.13.0/AndroidManifest.xml:2:1-7:12
+MERGED from [com.google.android.material:material:1.10.0] /home/fogy/.gradle/caches/8.13/transforms/908da84ce6d188a5ecc81691f0d6e1a0/transformed/material-1.10.0/AndroidManifest.xml:17:1-24:12
+MERGED from [androidx.constraintlayout:constraintlayout:2.1.4] /home/fogy/.gradle/caches/8.13/transforms/d90d5d8bd5281ca87f3552983909bfee/transformed/constraintlayout-2.1.4/AndroidManifest.xml:2:1-11:12
+MERGED from [androidx.appcompat:appcompat-resources:1.6.1] /home/fogy/.gradle/caches/8.13/transforms/f34b34b41ebade98dcdd928d03384e3b/transformed/appcompat-resources-1.6.1/AndroidManifest.xml:17:1-22:12
+MERGED from [androidx.appcompat:appcompat:1.6.1] /home/fogy/.gradle/caches/8.13/transforms/1212eafbb69bdc2a0ccf1730552b12ff/transformed/appcompat-1.6.1/AndroidManifest.xml:17:1-22:12
+MERGED from [androidx.recyclerview:recyclerview:1.3.2] /home/fogy/.gradle/caches/8.13/transforms/a456a6b828d84b855a03c46e21d7741e/transformed/recyclerview-1.3.2/AndroidManifest.xml:17:1-22:12
+MERGED from [androidx.viewpager2:viewpager2:1.1.0-beta02] /home/fogy/.gradle/caches/8.13/transforms/ef89fe53c41faac1d1e9b756db7abdcd/transformed/viewpager2-1.1.0-beta02/AndroidManifest.xml:2:1-7:12
+MERGED from [androidx.fragment:fragment:1.6.2] /home/fogy/.gradle/caches/8.13/transforms/292ee15eb232f8cc7ebc735c17848b92/transformed/fragment-1.6.2/AndroidManifest.xml:17:1-22:12
+MERGED from [androidx.fragment:fragment-ktx:1.6.2] /home/fogy/.gradle/caches/8.13/transforms/627d86c417f61bb06700f6c86272c6e6/transformed/fragment-ktx-1.6.2/AndroidManifest.xml:17:1-22:12
+MERGED from [androidx.activity:activity:1.8.1] /home/fogy/.gradle/caches/8.13/transforms/62fbb342378416bdfd6b4985ae9164c7/transformed/activity-1.8.1/AndroidManifest.xml:17:1-22:12
+MERGED from [androidx.activity:activity-ktx:1.8.1] /home/fogy/.gradle/caches/8.13/transforms/224fd73f9c3f41524ae2b8031cfd237e/transformed/activity-ktx-1.8.1/AndroidManifest.xml:2:1-7:12
+MERGED from [androidx.customview:customview-poolingcontainer:1.0.0] /home/fogy/.gradle/caches/8.13/transforms/4f8975d62c8fbb48ba0ab11b57504de4/transformed/customview-poolingcontainer-1.0.0/AndroidManifest.xml:17:1-23:12
+MERGED from [androidx.emoji2:emoji2-views-helper:1.2.0] /home/fogy/.gradle/caches/8.13/transforms/304b55971f23a798fae524d619a56235/transformed/emoji2-views-helper-1.2.0/AndroidManifest.xml:2:1-7:12
+MERGED from [androidx.emoji2:emoji2:1.2.0] /home/fogy/.gradle/caches/8.13/transforms/e008981857e292964294833b9cf08d17/transformed/emoji2-1.2.0/AndroidManifest.xml:17:1-35:12
+MERGED from [androidx.savedstate:savedstate-ktx:1.2.1] /home/fogy/.gradle/caches/8.13/transforms/1a3a6ae5057b108d58de1cec43e4aabe/transformed/savedstate-ktx-1.2.1/AndroidManifest.xml:17:1-22:12
+MERGED from [androidx.savedstate:savedstate:1.2.1] /home/fogy/.gradle/caches/8.13/transforms/85dd0c3e8dc17b889e9fcd197723ac05/transformed/savedstate-1.2.1/AndroidManifest.xml:17:1-22:12
+MERGED from [androidx.dynamicanimation:dynamicanimation:1.0.0] /home/fogy/.gradle/caches/8.13/transforms/c7c71dac0e14e8c34de7450ee30fd9e2/transformed/dynamicanimation-1.0.0/AndroidManifest.xml:17:1-22:12
+MERGED from [androidx.legacy:legacy-support-core-utils:1.0.0] /home/fogy/.gradle/caches/8.13/transforms/060232351a59dc2e3c26cafb4d8a73f7/transformed/legacy-support-core-utils-1.0.0/AndroidManifest.xml:17:1-22:12
+MERGED from [androidx.loader:loader:1.0.0] /home/fogy/.gradle/caches/8.13/transforms/99d9b6677af38993b740e48c517660c1/transformed/loader-1.0.0/AndroidManifest.xml:17:1-22:12
+MERGED from [androidx.lifecycle:lifecycle-livedata:2.7.0] /home/fogy/.gradle/caches/8.13/transforms/8c3f3968e83039620fded6478c7ee8da/transformed/lifecycle-livedata-2.7.0/AndroidManifest.xml:17:1-22:12
+MERGED from [androidx.lifecycle:lifecycle-livedata-core:2.7.0] /home/fogy/.gradle/caches/8.13/transforms/0b8ad3e97bf2e86ac51ce2b7a36bd3ea/transformed/lifecycle-livedata-core-2.7.0/AndroidManifest.xml:17:1-22:12
+MERGED from [androidx.lifecycle:lifecycle-process:2.7.0] /home/fogy/.gradle/caches/8.13/transforms/cbb8138adef61fe73d3714dfa5d950dd/transformed/lifecycle-process-2.7.0/AndroidManifest.xml:17:1-35:12
+MERGED from [androidx.lifecycle:lifecycle-livedata-core-ktx:2.7.0] /home/fogy/.gradle/caches/8.13/transforms/a8641d05d37e3ffafe15b2626e8ab94e/transformed/lifecycle-livedata-core-ktx-2.7.0/AndroidManifest.xml:2:1-7:12
+MERGED from [androidx.lifecycle:lifecycle-viewmodel-ktx:2.7.0] /home/fogy/.gradle/caches/8.13/transforms/c289646bef113005d1132f3048ccc044/transformed/lifecycle-viewmodel-ktx-2.7.0/AndroidManifest.xml:2:1-7:12
+MERGED from [androidx.lifecycle:lifecycle-viewmodel:2.7.0] /home/fogy/.gradle/caches/8.13/transforms/01fe21ee21851a52ee651a051a460be3/transformed/lifecycle-viewmodel-2.7.0/AndroidManifest.xml:17:1-22:12
+MERGED from [androidx.lifecycle:lifecycle-viewmodel-savedstate:2.7.0] /home/fogy/.gradle/caches/8.13/transforms/24d494e0ca95a12ce20b8b7282934cac/transformed/lifecycle-viewmodel-savedstate-2.7.0/AndroidManifest.xml:17:1-22:12
+MERGED from [androidx.core:core-ktx:1.12.0] /home/fogy/.gradle/caches/8.13/transforms/bcda1827ab35ede8b2a2fe52f6aef613/transformed/core-ktx-1.12.0/AndroidManifest.xml:2:1-7:12
+MERGED from [androidx.drawerlayout:drawerlayout:1.1.1] /home/fogy/.gradle/caches/8.13/transforms/ac12830abee3a5343c1175c1b6e51240/transformed/drawerlayout-1.1.1/AndroidManifest.xml:17:1-24:12
+MERGED from [androidx.coordinatorlayout:coordinatorlayout:1.1.0] /home/fogy/.gradle/caches/8.13/transforms/84817b776cf399f02eeb499eb2c0d402/transformed/coordinatorlayout-1.1.0/AndroidManifest.xml:17:1-24:12
+MERGED from [androidx.transition:transition:1.2.0] /home/fogy/.gradle/caches/8.13/transforms/42546e720cf6d9a8432736e9a7537e57/transformed/transition-1.2.0/AndroidManifest.xml:17:1-24:12
+MERGED from [androidx.vectordrawable:vectordrawable-animated:1.1.0] /home/fogy/.gradle/caches/8.13/transforms/2a3e45b52c05668c937c7022d5047758/transformed/vectordrawable-animated-1.1.0/AndroidManifest.xml:17:1-24:12
+MERGED from [androidx.vectordrawable:vectordrawable:1.1.0] /home/fogy/.gradle/caches/8.13/transforms/bd72c4fd50b51705463794317721f8ca/transformed/vectordrawable-1.1.0/AndroidManifest.xml:17:1-24:12
+MERGED from [androidx.viewpager:viewpager:1.0.0] /home/fogy/.gradle/caches/8.13/transforms/bf870e8d1da2f9129857522918ae4a1b/transformed/viewpager-1.0.0/AndroidManifest.xml:17:1-22:12
+MERGED from [androidx.customview:customview:1.1.0] /home/fogy/.gradle/caches/8.13/transforms/401f660e885216e21e7c6cae09c0eade/transformed/customview-1.1.0/AndroidManifest.xml:17:1-24:12
+MERGED from [androidx.core:core:1.12.0] /home/fogy/.gradle/caches/8.13/transforms/c2191cd8642cf9c6b52e09b4fefef89d/transformed/core-1.12.0/AndroidManifest.xml:17:1-30:12
+MERGED from [androidx.lifecycle:lifecycle-runtime:2.7.0] /home/fogy/.gradle/caches/8.13/transforms/46caeb819a410f308fc90b7f9aa269be/transformed/lifecycle-runtime-2.7.0/AndroidManifest.xml:2:1-7:12
+MERGED from [androidx.lifecycle:lifecycle-service:2.7.0] /home/fogy/.gradle/caches/8.13/transforms/f246c014ca4f7c99cf4225e951bd51a8/transformed/lifecycle-service-2.7.0/AndroidManifest.xml:2:1-7:12
+MERGED from [androidx.lifecycle:lifecycle-runtime-ktx:2.7.0] /home/fogy/.gradle/caches/8.13/transforms/19e0d7e395e1dbf675a2fdfd47d71b2c/transformed/lifecycle-runtime-ktx-2.7.0/AndroidManifest.xml:17:1-22:12
+MERGED from [androidx.cardview:cardview:1.0.0] /home/fogy/.gradle/caches/8.13/transforms/fd8856b0439801effa9fe2f52e21bdb4/transformed/cardview-1.0.0/AndroidManifest.xml:17:1-22:12
+MERGED from [androidx.cursoradapter:cursoradapter:1.0.0] /home/fogy/.gradle/caches/8.13/transforms/54b13c4115e583a13efbda29a0b31d2c/transformed/cursoradapter-1.0.0/AndroidManifest.xml:17:1-22:12
+MERGED from [androidx.interpolator:interpolator:1.0.0] /home/fogy/.gradle/caches/8.13/transforms/d861af9da55fbd20aa90f1286b2d79d7/transformed/interpolator-1.0.0/AndroidManifest.xml:17:1-22:12
+MERGED from [androidx.versionedparcelable:versionedparcelable:1.1.1] /home/fogy/.gradle/caches/8.13/transforms/c3e57f4c46023e7e5360e27bb123508f/transformed/versionedparcelable-1.1.1/AndroidManifest.xml:17:1-27:12
+MERGED from [androidx.arch.core:core-runtime:2.2.0] /home/fogy/.gradle/caches/8.13/transforms/670f5a0f59fedee2686eb02af3c7f718/transformed/core-runtime-2.2.0/AndroidManifest.xml:17:1-22:12
+MERGED from [androidx.profileinstaller:profileinstaller:1.3.0] /home/fogy/.gradle/caches/8.13/transforms/d9568865c7b519331093f5cd495897b1/transformed/profileinstaller-1.3.0/AndroidManifest.xml:17:1-55:12
+MERGED from [androidx.startup:startup-runtime:1.1.1] /home/fogy/.gradle/caches/8.13/transforms/077f86f0c70a33c75916f39eccf72ec0/transformed/startup-runtime-1.1.1/AndroidManifest.xml:17:1-33:12
+MERGED from [androidx.tracing:tracing:1.0.0] /home/fogy/.gradle/caches/8.13/transforms/8fc5eb73fc87715fdcfc8f07ca5c56ca/transformed/tracing-1.0.0/AndroidManifest.xml:17:1-24:12
+MERGED from [androidx.documentfile:documentfile:1.0.0] /home/fogy/.gradle/caches/8.13/transforms/dbad86ee2397b2e0a54bda722e8aa3f0/transformed/documentfile-1.0.0/AndroidManifest.xml:17:1-22:12
+MERGED from [androidx.localbroadcastmanager:localbroadcastmanager:1.0.0] /home/fogy/.gradle/caches/8.13/transforms/3e24fc6dd22df8ab244aeaf04f69b699/transformed/localbroadcastmanager-1.0.0/AndroidManifest.xml:17:1-22:12
+MERGED from [androidx.print:print:1.0.0] /home/fogy/.gradle/caches/8.13/transforms/d9a111a0140dafef195fbd3d44621855/transformed/print-1.0.0/AndroidManifest.xml:17:1-22:12
+MERGED from [androidx.annotation:annotation-experimental:1.3.0] /home/fogy/.gradle/caches/8.13/transforms/e733b27ad45f7403dc896b63b7013cf2/transformed/annotation-experimental-1.3.0/AndroidManifest.xml:17:1-22:12
+	package
+		INJECTED from /home/fogy/wifikeycontrol/android-app/app/src/main/AndroidManifest.xml
+	android:versionName
+		INJECTED from /home/fogy/wifikeycontrol/android-app/app/src/main/AndroidManifest.xml
+	xmlns:tools
+		ADDED from /home/fogy/wifikeycontrol/android-app/app/src/main/AndroidManifest.xml:3:5-51
+	android:versionCode
+		INJECTED from /home/fogy/wifikeycontrol/android-app/app/src/main/AndroidManifest.xml
+	xmlns:android
+		ADDED from /home/fogy/wifikeycontrol/android-app/app/src/main/AndroidManifest.xml:2:11-69
+uses-permission#android.permission.INTERNET
+ADDED from /home/fogy/wifikeycontrol/android-app/app/src/main/AndroidManifest.xml:6:5-67
+	android:name
+		ADDED from /home/fogy/wifikeycontrol/android-app/app/src/main/AndroidManifest.xml:6:22-64
+uses-permission#android.permission.ACCESS_NETWORK_STATE
+ADDED from /home/fogy/wifikeycontrol/android-app/app/src/main/AndroidManifest.xml:7:5-79
+	android:name
+		ADDED from /home/fogy/wifikeycontrol/android-app/app/src/main/AndroidManifest.xml:7:22-76
+uses-permission#android.permission.ACCESS_WIFI_STATE
+ADDED from /home/fogy/wifikeycontrol/android-app/app/src/main/AndroidManifest.xml:8:5-76
+	android:name
+		ADDED from /home/fogy/wifikeycontrol/android-app/app/src/main/AndroidManifest.xml:8:22-73
+uses-permission#android.permission.CHANGE_WIFI_MULTICAST_STATE
+ADDED from /home/fogy/wifikeycontrol/android-app/app/src/main/AndroidManifest.xml:9:5-86
+	android:name
+		ADDED from /home/fogy/wifikeycontrol/android-app/app/src/main/AndroidManifest.xml:9:22-83
+uses-permission#android.permission.FOREGROUND_SERVICE
+ADDED from /home/fogy/wifikeycontrol/android-app/app/src/main/AndroidManifest.xml:12:5-77
+	android:name
+		ADDED from /home/fogy/wifikeycontrol/android-app/app/src/main/AndroidManifest.xml:12:22-74
+uses-permission#android.permission.POST_NOTIFICATIONS
+ADDED from /home/fogy/wifikeycontrol/android-app/app/src/main/AndroidManifest.xml:13:5-77
+	android:name
+		ADDED from /home/fogy/wifikeycontrol/android-app/app/src/main/AndroidManifest.xml:13:22-74
+uses-permission#android.permission.FOREGROUND_SERVICE_DATA_SYNC
+ADDED from /home/fogy/wifikeycontrol/android-app/app/src/main/AndroidManifest.xml:14:5-87
+	android:name
+		ADDED from /home/fogy/wifikeycontrol/android-app/app/src/main/AndroidManifest.xml:14:22-84
+uses-permission#android.permission.SYSTEM_ALERT_WINDOW
+ADDED from /home/fogy/wifikeycontrol/android-app/app/src/main/AndroidManifest.xml:21:5-78
+	android:name
+		ADDED from /home/fogy/wifikeycontrol/android-app/app/src/main/AndroidManifest.xml:21:22-75
+uses-permission#android.permission.WRITE_SETTINGS
+ADDED from /home/fogy/wifikeycontrol/android-app/app/src/main/AndroidManifest.xml:22:5-23:47
+	tools:ignore
+		ADDED from /home/fogy/wifikeycontrol/android-app/app/src/main/AndroidManifest.xml:23:9-44
+	android:name
+		ADDED from /home/fogy/wifikeycontrol/android-app/app/src/main/AndroidManifest.xml:22:22-70
+uses-permission#android.permission.WAKE_LOCK
+ADDED from /home/fogy/wifikeycontrol/android-app/app/src/main/AndroidManifest.xml:26:5-68
+	android:name
+		ADDED from /home/fogy/wifikeycontrol/android-app/app/src/main/AndroidManifest.xml:26:22-65
+uses-permission#android.permission.REQUEST_IGNORE_BATTERY_OPTIMIZATIONS
+ADDED from /home/fogy/wifikeycontrol/android-app/app/src/main/AndroidManifest.xml:29:5-95
+	android:name
+		ADDED from /home/fogy/wifikeycontrol/android-app/app/src/main/AndroidManifest.xml:29:22-92
+application
+ADDED from /home/fogy/wifikeycontrol/android-app/app/src/main/AndroidManifest.xml:31:5-146:19
+INJECTED from /home/fogy/wifikeycontrol/android-app/app/src/main/AndroidManifest.xml:31:5-146:19
+MERGED from [com.google.android.material:material:1.10.0] /home/fogy/.gradle/caches/8.13/transforms/908da84ce6d188a5ecc81691f0d6e1a0/transformed/material-1.10.0/AndroidManifest.xml:22:5-20
+MERGED from [com.google.android.material:material:1.10.0] /home/fogy/.gradle/caches/8.13/transforms/908da84ce6d188a5ecc81691f0d6e1a0/transformed/material-1.10.0/AndroidManifest.xml:22:5-20
+MERGED from [androidx.constraintlayout:constraintlayout:2.1.4] /home/fogy/.gradle/caches/8.13/transforms/d90d5d8bd5281ca87f3552983909bfee/transformed/constraintlayout-2.1.4/AndroidManifest.xml:9:5-20
+MERGED from [androidx.constraintlayout:constraintlayout:2.1.4] /home/fogy/.gradle/caches/8.13/transforms/d90d5d8bd5281ca87f3552983909bfee/transformed/constraintlayout-2.1.4/AndroidManifest.xml:9:5-20
+MERGED from [androidx.emoji2:emoji2:1.2.0] /home/fogy/.gradle/caches/8.13/transforms/e008981857e292964294833b9cf08d17/transformed/emoji2-1.2.0/AndroidManifest.xml:23:5-33:19
+MERGED from [androidx.emoji2:emoji2:1.2.0] /home/fogy/.gradle/caches/8.13/transforms/e008981857e292964294833b9cf08d17/transformed/emoji2-1.2.0/AndroidManifest.xml:23:5-33:19
+MERGED from [androidx.lifecycle:lifecycle-process:2.7.0] /home/fogy/.gradle/caches/8.13/transforms/cbb8138adef61fe73d3714dfa5d950dd/transformed/lifecycle-process-2.7.0/AndroidManifest.xml:23:5-33:19
+MERGED from [androidx.lifecycle:lifecycle-process:2.7.0] /home/fogy/.gradle/caches/8.13/transforms/cbb8138adef61fe73d3714dfa5d950dd/transformed/lifecycle-process-2.7.0/AndroidManifest.xml:23:5-33:19
+MERGED from [androidx.core:core:1.12.0] /home/fogy/.gradle/caches/8.13/transforms/c2191cd8642cf9c6b52e09b4fefef89d/transformed/core-1.12.0/AndroidManifest.xml:28:5-89
+MERGED from [androidx.core:core:1.12.0] /home/fogy/.gradle/caches/8.13/transforms/c2191cd8642cf9c6b52e09b4fefef89d/transformed/core-1.12.0/AndroidManifest.xml:28:5-89
+MERGED from [androidx.versionedparcelable:versionedparcelable:1.1.1] /home/fogy/.gradle/caches/8.13/transforms/c3e57f4c46023e7e5360e27bb123508f/transformed/versionedparcelable-1.1.1/AndroidManifest.xml:24:5-25:19
+MERGED from [androidx.versionedparcelable:versionedparcelable:1.1.1] /home/fogy/.gradle/caches/8.13/transforms/c3e57f4c46023e7e5360e27bb123508f/transformed/versionedparcelable-1.1.1/AndroidManifest.xml:24:5-25:19
+MERGED from [androidx.profileinstaller:profileinstaller:1.3.0] /home/fogy/.gradle/caches/8.13/transforms/d9568865c7b519331093f5cd495897b1/transformed/profileinstaller-1.3.0/AndroidManifest.xml:23:5-53:19
+MERGED from [androidx.profileinstaller:profileinstaller:1.3.0] /home/fogy/.gradle/caches/8.13/transforms/d9568865c7b519331093f5cd495897b1/transformed/profileinstaller-1.3.0/AndroidManifest.xml:23:5-53:19
+MERGED from [androidx.startup:startup-runtime:1.1.1] /home/fogy/.gradle/caches/8.13/transforms/077f86f0c70a33c75916f39eccf72ec0/transformed/startup-runtime-1.1.1/AndroidManifest.xml:25:5-31:19
+MERGED from [androidx.startup:startup-runtime:1.1.1] /home/fogy/.gradle/caches/8.13/transforms/077f86f0c70a33c75916f39eccf72ec0/transformed/startup-runtime-1.1.1/AndroidManifest.xml:25:5-31:19
+	android:extractNativeLibs
+		INJECTED from /home/fogy/wifikeycontrol/android-app/app/src/main/AndroidManifest.xml
+	android:appComponentFactory
+		ADDED from [androidx.core:core:1.12.0] /home/fogy/.gradle/caches/8.13/transforms/c2191cd8642cf9c6b52e09b4fefef89d/transformed/core-1.12.0/AndroidManifest.xml:28:18-86
+	android:supportsRtl
+		ADDED from /home/fogy/wifikeycontrol/android-app/app/src/main/AndroidManifest.xml:38:9-35
+	android:label
+		ADDED from /home/fogy/wifikeycontrol/android-app/app/src/main/AndroidManifest.xml:36:9-41
+	android:fullBackupContent
+		ADDED from /home/fogy/wifikeycontrol/android-app/app/src/main/AndroidManifest.xml:34:9-54
+	android:roundIcon
+		ADDED from /home/fogy/wifikeycontrol/android-app/app/src/main/AndroidManifest.xml:37:9-56
+	tools:targetApi
+		ADDED from /home/fogy/wifikeycontrol/android-app/app/src/main/AndroidManifest.xml:40:9-29
+	android:icon
+		ADDED from /home/fogy/wifikeycontrol/android-app/app/src/main/AndroidManifest.xml:35:9-45
+	android:allowBackup
+		ADDED from /home/fogy/wifikeycontrol/android-app/app/src/main/AndroidManifest.xml:32:9-35
+	android:theme
+		ADDED from /home/fogy/wifikeycontrol/android-app/app/src/main/AndroidManifest.xml:39:9-52
+	android:dataExtractionRules
+		ADDED from /home/fogy/wifikeycontrol/android-app/app/src/main/AndroidManifest.xml:33:9-65
+activity#com.wifikeycontrol.MainActivity
+ADDED from /home/fogy/wifikeycontrol/android-app/app/src/main/AndroidManifest.xml:43:9-53:20
+	android:screenOrientation
+		ADDED from /home/fogy/wifikeycontrol/android-app/app/src/main/AndroidManifest.xml:47:13-49
+	android:launchMode
+		ADDED from /home/fogy/wifikeycontrol/android-app/app/src/main/AndroidManifest.xml:48:13-43
+	android:exported
+		ADDED from /home/fogy/wifikeycontrol/android-app/app/src/main/AndroidManifest.xml:45:13-36
+	android:theme
+		ADDED from /home/fogy/wifikeycontrol/android-app/app/src/main/AndroidManifest.xml:46:13-56
+	android:name
+		ADDED from /home/fogy/wifikeycontrol/android-app/app/src/main/AndroidManifest.xml:44:13-41
+intent-filter#action:name:android.intent.action.MAIN+category:name:android.intent.category.LAUNCHER
+ADDED from /home/fogy/wifikeycontrol/android-app/app/src/main/AndroidManifest.xml:49:13-52:29
+action#android.intent.action.MAIN
+ADDED from /home/fogy/wifikeycontrol/android-app/app/src/main/AndroidManifest.xml:50:17-69
+	android:name
+		ADDED from /home/fogy/wifikeycontrol/android-app/app/src/main/AndroidManifest.xml:50:25-66
+category#android.intent.category.LAUNCHER
+ADDED from /home/fogy/wifikeycontrol/android-app/app/src/main/AndroidManifest.xml:51:17-77
+	android:name
+		ADDED from /home/fogy/wifikeycontrol/android-app/app/src/main/AndroidManifest.xml:51:27-74
+service#com.wifikeycontrol.services.ConnectionService
+ADDED from /home/fogy/wifikeycontrol/android-app/app/src/main/AndroidManifest.xml:56:9-60:56
+	android:enabled
+		ADDED from /home/fogy/wifikeycontrol/android-app/app/src/main/AndroidManifest.xml:58:13-35
+	android:exported
+		ADDED from /home/fogy/wifikeycontrol/android-app/app/src/main/AndroidManifest.xml:59:13-37
+	android:foregroundServiceType
+		ADDED from /home/fogy/wifikeycontrol/android-app/app/src/main/AndroidManifest.xml:60:13-53
+	android:name
+		ADDED from /home/fogy/wifikeycontrol/android-app/app/src/main/AndroidManifest.xml:57:13-55
+service#com.wifikeycontrol.services.InputSimulatorService
+ADDED from /home/fogy/wifikeycontrol/android-app/app/src/main/AndroidManifest.xml:63:9-74:19
+	android:enabled
+		ADDED from /home/fogy/wifikeycontrol/android-app/app/src/main/AndroidManifest.xml:65:13-35
+	android:exported
+		ADDED from /home/fogy/wifikeycontrol/android-app/app/src/main/AndroidManifest.xml:66:13-37
+	android:permission
+		ADDED from /home/fogy/wifikeycontrol/android-app/app/src/main/AndroidManifest.xml:67:13-79
+	android:name
+		ADDED from /home/fogy/wifikeycontrol/android-app/app/src/main/AndroidManifest.xml:64:13-59
+intent-filter#action:name:android.accessibilityservice.AccessibilityService
+ADDED from /home/fogy/wifikeycontrol/android-app/app/src/main/AndroidManifest.xml:68:13-70:29
+action#android.accessibilityservice.AccessibilityService
+ADDED from /home/fogy/wifikeycontrol/android-app/app/src/main/AndroidManifest.xml:69:17-92
+	android:name
+		ADDED from /home/fogy/wifikeycontrol/android-app/app/src/main/AndroidManifest.xml:69:25-89
+meta-data#android.accessibilityservice
+ADDED from /home/fogy/wifikeycontrol/android-app/app/src/main/AndroidManifest.xml:71:13-73:72
+	android:resource
+		ADDED from /home/fogy/wifikeycontrol/android-app/app/src/main/AndroidManifest.xml:73:17-69
+	android:name
+		ADDED from /home/fogy/wifikeycontrol/android-app/app/src/main/AndroidManifest.xml:72:17-60
+service#com.wifikeycontrol.services.KeyboardService
+ADDED from /home/fogy/wifikeycontrol/android-app/app/src/main/AndroidManifest.xml:77:9-88:19
+	android:enabled
+		ADDED from /home/fogy/wifikeycontrol/android-app/app/src/main/AndroidManifest.xml:79:13-35
+	android:exported
+		ADDED from /home/fogy/wifikeycontrol/android-app/app/src/main/AndroidManifest.xml:80:13-37
+	android:permission
+		ADDED from /home/fogy/wifikeycontrol/android-app/app/src/main/AndroidManifest.xml:81:13-70
+	android:name
+		ADDED from /home/fogy/wifikeycontrol/android-app/app/src/main/AndroidManifest.xml:78:13-53
+intent-filter#action:name:android.view.InputMethod
+ADDED from /home/fogy/wifikeycontrol/android-app/app/src/main/AndroidManifest.xml:82:13-84:29
+action#android.view.InputMethod
+ADDED from /home/fogy/wifikeycontrol/android-app/app/src/main/AndroidManifest.xml:83:17-67
+	android:name
+		ADDED from /home/fogy/wifikeycontrol/android-app/app/src/main/AndroidManifest.xml:83:25-64
+meta-data#android.view.im
+ADDED from /home/fogy/wifikeycontrol/android-app/app/src/main/AndroidManifest.xml:85:13-87:63
+	android:resource
+		ADDED from /home/fogy/wifikeycontrol/android-app/app/src/main/AndroidManifest.xml:87:17-60
+	android:name
+		ADDED from /home/fogy/wifikeycontrol/android-app/app/src/main/AndroidManifest.xml:86:17-47
+receiver#com.wifikeycontrol.receivers.NetworkDiscoveryReceiver
+ADDED from /home/fogy/wifikeycontrol/android-app/app/src/main/AndroidManifest.xml:91:9-99:20
+	android:enabled
+		ADDED from /home/fogy/wifikeycontrol/android-app/app/src/main/AndroidManifest.xml:93:13-35
+	android:exported
+		ADDED from /home/fogy/wifikeycontrol/android-app/app/src/main/AndroidManifest.xml:94:13-37
+	android:name
+		ADDED from /home/fogy/wifikeycontrol/android-app/app/src/main/AndroidManifest.xml:92:13-63
+intent-filter#action:name:android.net.conn.CONNECTIVITY_CHANGE+action:name:android.net.wifi.WIFI_STATE_CHANGED
+ADDED from /home/fogy/wifikeycontrol/android-app/app/src/main/AndroidManifest.xml:95:13-98:29
+action#android.net.conn.CONNECTIVITY_CHANGE
+ADDED from /home/fogy/wifikeycontrol/android-app/app/src/main/AndroidManifest.xml:96:17-79
+	android:name
+		ADDED from /home/fogy/wifikeycontrol/android-app/app/src/main/AndroidManifest.xml:96:25-76
+action#android.net.wifi.WIFI_STATE_CHANGED
+ADDED from /home/fogy/wifikeycontrol/android-app/app/src/main/AndroidManifest.xml:97:17-78
+	android:name
+		ADDED from /home/fogy/wifikeycontrol/android-app/app/src/main/AndroidManifest.xml:97:25-75
+receiver#com.wifikeycontrol.receivers.BootReceiver
+ADDED from /home/fogy/wifikeycontrol/android-app/app/src/main/AndroidManifest.xml:102:9-112:20
+	android:enabled
+		ADDED from /home/fogy/wifikeycontrol/android-app/app/src/main/AndroidManifest.xml:104:13-35
+	android:exported
+		ADDED from /home/fogy/wifikeycontrol/android-app/app/src/main/AndroidManifest.xml:105:13-37
+	android:name
+		ADDED from /home/fogy/wifikeycontrol/android-app/app/src/main/AndroidManifest.xml:103:13-51
+intent-filter#action:name:android.intent.action.BOOT_COMPLETED+action:name:android.intent.action.MY_PACKAGE_REPLACED+action:name:android.intent.action.PACKAGE_REPLACED+data:scheme:package
+ADDED from /home/fogy/wifikeycontrol/android-app/app/src/main/AndroidManifest.xml:106:13-111:29
+action#android.intent.action.BOOT_COMPLETED
+ADDED from /home/fogy/wifikeycontrol/android-app/app/src/main/AndroidManifest.xml:107:17-79
+	android:name
+		ADDED from /home/fogy/wifikeycontrol/android-app/app/src/main/AndroidManifest.xml:107:25-76
+action#android.intent.action.MY_PACKAGE_REPLACED
+ADDED from /home/fogy/wifikeycontrol/android-app/app/src/main/AndroidManifest.xml:108:17-84
+	android:name
+		ADDED from /home/fogy/wifikeycontrol/android-app/app/src/main/AndroidManifest.xml:108:25-81
+action#android.intent.action.PACKAGE_REPLACED
+ADDED from /home/fogy/wifikeycontrol/android-app/app/src/main/AndroidManifest.xml:109:17-81
+	android:name
+		ADDED from /home/fogy/wifikeycontrol/android-app/app/src/main/AndroidManifest.xml:109:25-78
+data
+ADDED from /home/fogy/wifikeycontrol/android-app/app/src/main/AndroidManifest.xml:110:17-50
+	android:scheme
+		ADDED from /home/fogy/wifikeycontrol/android-app/app/src/main/AndroidManifest.xml:110:23-47
+activity#com.wifikeycontrol.SettingsActivity
+ADDED from /home/fogy/wifikeycontrol/android-app/app/src/main/AndroidManifest.xml:115:9-119:59
+	android:parentActivityName
+		ADDED from /home/fogy/wifikeycontrol/android-app/app/src/main/AndroidManifest.xml:118:13-55
+	android:exported
+		ADDED from /home/fogy/wifikeycontrol/android-app/app/src/main/AndroidManifest.xml:117:13-37
+	android:theme
+		ADDED from /home/fogy/wifikeycontrol/android-app/app/src/main/AndroidManifest.xml:119:13-56
+	android:name
+		ADDED from /home/fogy/wifikeycontrol/android-app/app/src/main/AndroidManifest.xml:116:13-45
+activity#com.wifikeycontrol.AccessibilitySettingsActivity
+ADDED from /home/fogy/wifikeycontrol/android-app/app/src/main/AndroidManifest.xml:122:9-126:59
+	android:parentActivityName
+		ADDED from /home/fogy/wifikeycontrol/android-app/app/src/main/AndroidManifest.xml:125:13-55
+	android:exported
+		ADDED from /home/fogy/wifikeycontrol/android-app/app/src/main/AndroidManifest.xml:124:13-37
+	android:theme
+		ADDED from /home/fogy/wifikeycontrol/android-app/app/src/main/AndroidManifest.xml:126:13-56
+	android:name
+		ADDED from /home/fogy/wifikeycontrol/android-app/app/src/main/AndroidManifest.xml:123:13-58
+activity#com.wifikeycontrol.KeyboardSettingsActivity
+ADDED from /home/fogy/wifikeycontrol/android-app/app/src/main/AndroidManifest.xml:129:9-133:59
+	android:parentActivityName
+		ADDED from /home/fogy/wifikeycontrol/android-app/app/src/main/AndroidManifest.xml:132:13-55
+	android:exported
+		ADDED from /home/fogy/wifikeycontrol/android-app/app/src/main/AndroidManifest.xml:131:13-37
+	android:theme
+		ADDED from /home/fogy/wifikeycontrol/android-app/app/src/main/AndroidManifest.xml:133:13-56
+	android:name
+		ADDED from /home/fogy/wifikeycontrol/android-app/app/src/main/AndroidManifest.xml:130:13-53
+queries
+ADDED from /home/fogy/wifikeycontrol/android-app/app/src/main/AndroidManifest.xml:149:5-161:15
+intent#action:name:android.settings.ACCESSIBILITY_SETTINGS
+ADDED from /home/fogy/wifikeycontrol/android-app/app/src/main/AndroidManifest.xml:151:9-153:18
+action#android.settings.ACCESSIBILITY_SETTINGS
+ADDED from /home/fogy/wifikeycontrol/android-app/app/src/main/AndroidManifest.xml:152:13-78
+	android:name
+		ADDED from /home/fogy/wifikeycontrol/android-app/app/src/main/AndroidManifest.xml:152:21-75
+intent#action:name:android.settings.INPUT_METHOD_SETTINGS
+ADDED from /home/fogy/wifikeycontrol/android-app/app/src/main/AndroidManifest.xml:154:9-156:18
+action#android.settings.INPUT_METHOD_SETTINGS
+ADDED from /home/fogy/wifikeycontrol/android-app/app/src/main/AndroidManifest.xml:155:13-77
+	android:name
+		ADDED from /home/fogy/wifikeycontrol/android-app/app/src/main/AndroidManifest.xml:155:21-74
+intent#action:name:android.settings.IGNORE_BATTERY_OPTIMIZATION_SETTINGS
+ADDED from /home/fogy/wifikeycontrol/android-app/app/src/main/AndroidManifest.xml:158:9-160:18
+action#android.settings.IGNORE_BATTERY_OPTIMIZATION_SETTINGS
+ADDED from /home/fogy/wifikeycontrol/android-app/app/src/main/AndroidManifest.xml:159:13-92
+	android:name
+		ADDED from /home/fogy/wifikeycontrol/android-app/app/src/main/AndroidManifest.xml:159:21-89
+meta-data#android.support.FILE_PROVIDER_PATHS
+ADDED from /home/fogy/wifikeycontrol/android-app/app/src/main/AndroidManifest.xml:141:13-143:54
+	android:resource
+		ADDED from /home/fogy/wifikeycontrol/android-app/app/src/main/AndroidManifest.xml:143:17-51
+	android:name
+		ADDED from /home/fogy/wifikeycontrol/android-app/app/src/main/AndroidManifest.xml:142:17-67
+uses-sdk
+INJECTED from /home/fogy/wifikeycontrol/android-app/app/src/main/AndroidManifest.xml reason: use-sdk injection requested
+INJECTED from /home/fogy/wifikeycontrol/android-app/app/src/main/AndroidManifest.xml
+INJECTED from /home/fogy/wifikeycontrol/android-app/app/src/main/AndroidManifest.xml
+MERGED from [androidx.databinding:viewbinding:8.13.0] /home/fogy/.gradle/caches/8.13/transforms/4d3935665078b290a5ac822bc1550d2b/transformed/viewbinding-8.13.0/AndroidManifest.xml:5:5-44
+MERGED from [androidx.databinding:viewbinding:8.13.0] /home/fogy/.gradle/caches/8.13/transforms/4d3935665078b290a5ac822bc1550d2b/transformed/viewbinding-8.13.0/AndroidManifest.xml:5:5-44
+MERGED from [com.google.android.material:material:1.10.0] /home/fogy/.gradle/caches/8.13/transforms/908da84ce6d188a5ecc81691f0d6e1a0/transformed/material-1.10.0/AndroidManifest.xml:20:5-44
+MERGED from [com.google.android.material:material:1.10.0] /home/fogy/.gradle/caches/8.13/transforms/908da84ce6d188a5ecc81691f0d6e1a0/transformed/material-1.10.0/AndroidManifest.xml:20:5-44
+MERGED from [androidx.constraintlayout:constraintlayout:2.1.4] /home/fogy/.gradle/caches/8.13/transforms/d90d5d8bd5281ca87f3552983909bfee/transformed/constraintlayout-2.1.4/AndroidManifest.xml:5:5-7:41
+MERGED from [androidx.constraintlayout:constraintlayout:2.1.4] /home/fogy/.gradle/caches/8.13/transforms/d90d5d8bd5281ca87f3552983909bfee/transformed/constraintlayout-2.1.4/AndroidManifest.xml:5:5-7:41
+MERGED from [androidx.appcompat:appcompat-resources:1.6.1] /home/fogy/.gradle/caches/8.13/transforms/f34b34b41ebade98dcdd928d03384e3b/transformed/appcompat-resources-1.6.1/AndroidManifest.xml:20:5-44
+MERGED from [androidx.appcompat:appcompat-resources:1.6.1] /home/fogy/.gradle/caches/8.13/transforms/f34b34b41ebade98dcdd928d03384e3b/transformed/appcompat-resources-1.6.1/AndroidManifest.xml:20:5-44
+MERGED from [androidx.appcompat:appcompat:1.6.1] /home/fogy/.gradle/caches/8.13/transforms/1212eafbb69bdc2a0ccf1730552b12ff/transformed/appcompat-1.6.1/AndroidManifest.xml:20:5-44
+MERGED from [androidx.appcompat:appcompat:1.6.1] /home/fogy/.gradle/caches/8.13/transforms/1212eafbb69bdc2a0ccf1730552b12ff/transformed/appcompat-1.6.1/AndroidManifest.xml:20:5-44
+MERGED from [androidx.recyclerview:recyclerview:1.3.2] /home/fogy/.gradle/caches/8.13/transforms/a456a6b828d84b855a03c46e21d7741e/transformed/recyclerview-1.3.2/AndroidManifest.xml:20:5-44
+MERGED from [androidx.recyclerview:recyclerview:1.3.2] /home/fogy/.gradle/caches/8.13/transforms/a456a6b828d84b855a03c46e21d7741e/transformed/recyclerview-1.3.2/AndroidManifest.xml:20:5-44
+MERGED from [androidx.viewpager2:viewpager2:1.1.0-beta02] /home/fogy/.gradle/caches/8.13/transforms/ef89fe53c41faac1d1e9b756db7abdcd/transformed/viewpager2-1.1.0-beta02/AndroidManifest.xml:5:5-44
+MERGED from [androidx.viewpager2:viewpager2:1.1.0-beta02] /home/fogy/.gradle/caches/8.13/transforms/ef89fe53c41faac1d1e9b756db7abdcd/transformed/viewpager2-1.1.0-beta02/AndroidManifest.xml:5:5-44
+MERGED from [androidx.fragment:fragment:1.6.2] /home/fogy/.gradle/caches/8.13/transforms/292ee15eb232f8cc7ebc735c17848b92/transformed/fragment-1.6.2/AndroidManifest.xml:20:5-44
+MERGED from [androidx.fragment:fragment:1.6.2] /home/fogy/.gradle/caches/8.13/transforms/292ee15eb232f8cc7ebc735c17848b92/transformed/fragment-1.6.2/AndroidManifest.xml:20:5-44
+MERGED from [androidx.fragment:fragment-ktx:1.6.2] /home/fogy/.gradle/caches/8.13/transforms/627d86c417f61bb06700f6c86272c6e6/transformed/fragment-ktx-1.6.2/AndroidManifest.xml:20:5-44
+MERGED from [androidx.fragment:fragment-ktx:1.6.2] /home/fogy/.gradle/caches/8.13/transforms/627d86c417f61bb06700f6c86272c6e6/transformed/fragment-ktx-1.6.2/AndroidManifest.xml:20:5-44
+MERGED from [androidx.activity:activity:1.8.1] /home/fogy/.gradle/caches/8.13/transforms/62fbb342378416bdfd6b4985ae9164c7/transformed/activity-1.8.1/AndroidManifest.xml:20:5-44
+MERGED from [androidx.activity:activity:1.8.1] /home/fogy/.gradle/caches/8.13/transforms/62fbb342378416bdfd6b4985ae9164c7/transformed/activity-1.8.1/AndroidManifest.xml:20:5-44
+MERGED from [androidx.activity:activity-ktx:1.8.1] /home/fogy/.gradle/caches/8.13/transforms/224fd73f9c3f41524ae2b8031cfd237e/transformed/activity-ktx-1.8.1/AndroidManifest.xml:5:5-44
+MERGED from [androidx.activity:activity-ktx:1.8.1] /home/fogy/.gradle/caches/8.13/transforms/224fd73f9c3f41524ae2b8031cfd237e/transformed/activity-ktx-1.8.1/AndroidManifest.xml:5:5-44
+MERGED from [androidx.customview:customview-poolingcontainer:1.0.0] /home/fogy/.gradle/caches/8.13/transforms/4f8975d62c8fbb48ba0ab11b57504de4/transformed/customview-poolingcontainer-1.0.0/AndroidManifest.xml:20:5-21:38
+MERGED from [androidx.customview:customview-poolingcontainer:1.0.0] /home/fogy/.gradle/caches/8.13/transforms/4f8975d62c8fbb48ba0ab11b57504de4/transformed/customview-poolingcontainer-1.0.0/AndroidManifest.xml:20:5-21:38
+MERGED from [androidx.emoji2:emoji2-views-helper:1.2.0] /home/fogy/.gradle/caches/8.13/transforms/304b55971f23a798fae524d619a56235/transformed/emoji2-views-helper-1.2.0/AndroidManifest.xml:5:5-44
+MERGED from [androidx.emoji2:emoji2-views-helper:1.2.0] /home/fogy/.gradle/caches/8.13/transforms/304b55971f23a798fae524d619a56235/transformed/emoji2-views-helper-1.2.0/AndroidManifest.xml:5:5-44
+MERGED from [androidx.emoji2:emoji2:1.2.0] /home/fogy/.gradle/caches/8.13/transforms/e008981857e292964294833b9cf08d17/transformed/emoji2-1.2.0/AndroidManifest.xml:21:5-44
+MERGED from [androidx.emoji2:emoji2:1.2.0] /home/fogy/.gradle/caches/8.13/transforms/e008981857e292964294833b9cf08d17/transformed/emoji2-1.2.0/AndroidManifest.xml:21:5-44
+MERGED from [androidx.savedstate:savedstate-ktx:1.2.1] /home/fogy/.gradle/caches/8.13/transforms/1a3a6ae5057b108d58de1cec43e4aabe/transformed/savedstate-ktx-1.2.1/AndroidManifest.xml:20:5-44
+MERGED from [androidx.savedstate:savedstate-ktx:1.2.1] /home/fogy/.gradle/caches/8.13/transforms/1a3a6ae5057b108d58de1cec43e4aabe/transformed/savedstate-ktx-1.2.1/AndroidManifest.xml:20:5-44
+MERGED from [androidx.savedstate:savedstate:1.2.1] /home/fogy/.gradle/caches/8.13/transforms/85dd0c3e8dc17b889e9fcd197723ac05/transformed/savedstate-1.2.1/AndroidManifest.xml:20:5-44
+MERGED from [androidx.savedstate:savedstate:1.2.1] /home/fogy/.gradle/caches/8.13/transforms/85dd0c3e8dc17b889e9fcd197723ac05/transformed/savedstate-1.2.1/AndroidManifest.xml:20:5-44
+MERGED from [androidx.dynamicanimation:dynamicanimation:1.0.0] /home/fogy/.gradle/caches/8.13/transforms/c7c71dac0e14e8c34de7450ee30fd9e2/transformed/dynamicanimation-1.0.0/AndroidManifest.xml:20:5-44
+MERGED from [androidx.dynamicanimation:dynamicanimation:1.0.0] /home/fogy/.gradle/caches/8.13/transforms/c7c71dac0e14e8c34de7450ee30fd9e2/transformed/dynamicanimation-1.0.0/AndroidManifest.xml:20:5-44
+MERGED from [androidx.legacy:legacy-support-core-utils:1.0.0] /home/fogy/.gradle/caches/8.13/transforms/060232351a59dc2e3c26cafb4d8a73f7/transformed/legacy-support-core-utils-1.0.0/AndroidManifest.xml:20:5-44
+MERGED from [androidx.legacy:legacy-support-core-utils:1.0.0] /home/fogy/.gradle/caches/8.13/transforms/060232351a59dc2e3c26cafb4d8a73f7/transformed/legacy-support-core-utils-1.0.0/AndroidManifest.xml:20:5-44
+MERGED from [androidx.loader:loader:1.0.0] /home/fogy/.gradle/caches/8.13/transforms/99d9b6677af38993b740e48c517660c1/transformed/loader-1.0.0/AndroidManifest.xml:20:5-44
+MERGED from [androidx.loader:loader:1.0.0] /home/fogy/.gradle/caches/8.13/transforms/99d9b6677af38993b740e48c517660c1/transformed/loader-1.0.0/AndroidManifest.xml:20:5-44
+MERGED from [androidx.lifecycle:lifecycle-livedata:2.7.0] /home/fogy/.gradle/caches/8.13/transforms/8c3f3968e83039620fded6478c7ee8da/transformed/lifecycle-livedata-2.7.0/AndroidManifest.xml:20:5-44
+MERGED from [androidx.lifecycle:lifecycle-livedata:2.7.0] /home/fogy/.gradle/caches/8.13/transforms/8c3f3968e83039620fded6478c7ee8da/transformed/lifecycle-livedata-2.7.0/AndroidManifest.xml:20:5-44
+MERGED from [androidx.lifecycle:lifecycle-livedata-core:2.7.0] /home/fogy/.gradle/caches/8.13/transforms/0b8ad3e97bf2e86ac51ce2b7a36bd3ea/transformed/lifecycle-livedata-core-2.7.0/AndroidManifest.xml:20:5-44
+MERGED from [androidx.lifecycle:lifecycle-livedata-core:2.7.0] /home/fogy/.gradle/caches/8.13/transforms/0b8ad3e97bf2e86ac51ce2b7a36bd3ea/transformed/lifecycle-livedata-core-2.7.0/AndroidManifest.xml:20:5-44
+MERGED from [androidx.lifecycle:lifecycle-process:2.7.0] /home/fogy/.gradle/caches/8.13/transforms/cbb8138adef61fe73d3714dfa5d950dd/transformed/lifecycle-process-2.7.0/AndroidManifest.xml:21:5-44
+MERGED from [androidx.lifecycle:lifecycle-process:2.7.0] /home/fogy/.gradle/caches/8.13/transforms/cbb8138adef61fe73d3714dfa5d950dd/transformed/lifecycle-process-2.7.0/AndroidManifest.xml:21:5-44
+MERGED from [androidx.lifecycle:lifecycle-livedata-core-ktx:2.7.0] /home/fogy/.gradle/caches/8.13/transforms/a8641d05d37e3ffafe15b2626e8ab94e/transformed/lifecycle-livedata-core-ktx-2.7.0/AndroidManifest.xml:5:5-44
+MERGED from [androidx.lifecycle:lifecycle-livedata-core-ktx:2.7.0] /home/fogy/.gradle/caches/8.13/transforms/a8641d05d37e3ffafe15b2626e8ab94e/transformed/lifecycle-livedata-core-ktx-2.7.0/AndroidManifest.xml:5:5-44
+MERGED from [androidx.lifecycle:lifecycle-viewmodel-ktx:2.7.0] /home/fogy/.gradle/caches/8.13/transforms/c289646bef113005d1132f3048ccc044/transformed/lifecycle-viewmodel-ktx-2.7.0/AndroidManifest.xml:5:5-44
+MERGED from [androidx.lifecycle:lifecycle-viewmodel-ktx:2.7.0] /home/fogy/.gradle/caches/8.13/transforms/c289646bef113005d1132f3048ccc044/transformed/lifecycle-viewmodel-ktx-2.7.0/AndroidManifest.xml:5:5-44
+MERGED from [androidx.lifecycle:lifecycle-viewmodel:2.7.0] /home/fogy/.gradle/caches/8.13/transforms/01fe21ee21851a52ee651a051a460be3/transformed/lifecycle-viewmodel-2.7.0/AndroidManifest.xml:20:5-44
+MERGED from [androidx.lifecycle:lifecycle-viewmodel:2.7.0] /home/fogy/.gradle/caches/8.13/transforms/01fe21ee21851a52ee651a051a460be3/transformed/lifecycle-viewmodel-2.7.0/AndroidManifest.xml:20:5-44
+MERGED from [androidx.lifecycle:lifecycle-viewmodel-savedstate:2.7.0] /home/fogy/.gradle/caches/8.13/transforms/24d494e0ca95a12ce20b8b7282934cac/transformed/lifecycle-viewmodel-savedstate-2.7.0/AndroidManifest.xml:20:5-44
+MERGED from [androidx.lifecycle:lifecycle-viewmodel-savedstate:2.7.0] /home/fogy/.gradle/caches/8.13/transforms/24d494e0ca95a12ce20b8b7282934cac/transformed/lifecycle-viewmodel-savedstate-2.7.0/AndroidManifest.xml:20:5-44
+MERGED from [androidx.core:core-ktx:1.12.0] /home/fogy/.gradle/caches/8.13/transforms/bcda1827ab35ede8b2a2fe52f6aef613/transformed/core-ktx-1.12.0/AndroidManifest.xml:5:5-44
+MERGED from [androidx.core:core-ktx:1.12.0] /home/fogy/.gradle/caches/8.13/transforms/bcda1827ab35ede8b2a2fe52f6aef613/transformed/core-ktx-1.12.0/AndroidManifest.xml:5:5-44
+MERGED from [androidx.drawerlayout:drawerlayout:1.1.1] /home/fogy/.gradle/caches/8.13/transforms/ac12830abee3a5343c1175c1b6e51240/transformed/drawerlayout-1.1.1/AndroidManifest.xml:20:5-22:41
+MERGED from [androidx.drawerlayout:drawerlayout:1.1.1] /home/fogy/.gradle/caches/8.13/transforms/ac12830abee3a5343c1175c1b6e51240/transformed/drawerlayout-1.1.1/AndroidManifest.xml:20:5-22:41
+MERGED from [androidx.coordinatorlayout:coordinatorlayout:1.1.0] /home/fogy/.gradle/caches/8.13/transforms/84817b776cf399f02eeb499eb2c0d402/transformed/coordinatorlayout-1.1.0/AndroidManifest.xml:20:5-22:41
+MERGED from [androidx.coordinatorlayout:coordinatorlayout:1.1.0] /home/fogy/.gradle/caches/8.13/transforms/84817b776cf399f02eeb499eb2c0d402/transformed/coordinatorlayout-1.1.0/AndroidManifest.xml:20:5-22:41
+MERGED from [androidx.transition:transition:1.2.0] /home/fogy/.gradle/caches/8.13/transforms/42546e720cf6d9a8432736e9a7537e57/transformed/transition-1.2.0/AndroidManifest.xml:20:5-22:41
+MERGED from [androidx.transition:transition:1.2.0] /home/fogy/.gradle/caches/8.13/transforms/42546e720cf6d9a8432736e9a7537e57/transformed/transition-1.2.0/AndroidManifest.xml:20:5-22:41
+MERGED from [androidx.vectordrawable:vectordrawable-animated:1.1.0] /home/fogy/.gradle/caches/8.13/transforms/2a3e45b52c05668c937c7022d5047758/transformed/vectordrawable-animated-1.1.0/AndroidManifest.xml:20:5-22:41
+MERGED from [androidx.vectordrawable:vectordrawable-animated:1.1.0] /home/fogy/.gradle/caches/8.13/transforms/2a3e45b52c05668c937c7022d5047758/transformed/vectordrawable-animated-1.1.0/AndroidManifest.xml:20:5-22:41
+MERGED from [androidx.vectordrawable:vectordrawable:1.1.0] /home/fogy/.gradle/caches/8.13/transforms/bd72c4fd50b51705463794317721f8ca/transformed/vectordrawable-1.1.0/AndroidManifest.xml:20:5-22:41
+MERGED from [androidx.vectordrawable:vectordrawable:1.1.0] /home/fogy/.gradle/caches/8.13/transforms/bd72c4fd50b51705463794317721f8ca/transformed/vectordrawable-1.1.0/AndroidManifest.xml:20:5-22:41
+MERGED from [androidx.viewpager:viewpager:1.0.0] /home/fogy/.gradle/caches/8.13/transforms/bf870e8d1da2f9129857522918ae4a1b/transformed/viewpager-1.0.0/AndroidManifest.xml:20:5-44
+MERGED from [androidx.viewpager:viewpager:1.0.0] /home/fogy/.gradle/caches/8.13/transforms/bf870e8d1da2f9129857522918ae4a1b/transformed/viewpager-1.0.0/AndroidManifest.xml:20:5-44
+MERGED from [androidx.customview:customview:1.1.0] /home/fogy/.gradle/caches/8.13/transforms/401f660e885216e21e7c6cae09c0eade/transformed/customview-1.1.0/AndroidManifest.xml:20:5-22:41
+MERGED from [androidx.customview:customview:1.1.0] /home/fogy/.gradle/caches/8.13/transforms/401f660e885216e21e7c6cae09c0eade/transformed/customview-1.1.0/AndroidManifest.xml:20:5-22:41
+MERGED from [androidx.core:core:1.12.0] /home/fogy/.gradle/caches/8.13/transforms/c2191cd8642cf9c6b52e09b4fefef89d/transformed/core-1.12.0/AndroidManifest.xml:20:5-44
+MERGED from [androidx.core:core:1.12.0] /home/fogy/.gradle/caches/8.13/transforms/c2191cd8642cf9c6b52e09b4fefef89d/transformed/core-1.12.0/AndroidManifest.xml:20:5-44
+MERGED from [androidx.lifecycle:lifecycle-runtime:2.7.0] /home/fogy/.gradle/caches/8.13/transforms/46caeb819a410f308fc90b7f9aa269be/transformed/lifecycle-runtime-2.7.0/AndroidManifest.xml:5:5-44
+MERGED from [androidx.lifecycle:lifecycle-runtime:2.7.0] /home/fogy/.gradle/caches/8.13/transforms/46caeb819a410f308fc90b7f9aa269be/transformed/lifecycle-runtime-2.7.0/AndroidManifest.xml:5:5-44
+MERGED from [androidx.lifecycle:lifecycle-service:2.7.0] /home/fogy/.gradle/caches/8.13/transforms/f246c014ca4f7c99cf4225e951bd51a8/transformed/lifecycle-service-2.7.0/AndroidManifest.xml:5:5-44
+MERGED from [androidx.lifecycle:lifecycle-service:2.7.0] /home/fogy/.gradle/caches/8.13/transforms/f246c014ca4f7c99cf4225e951bd51a8/transformed/lifecycle-service-2.7.0/AndroidManifest.xml:5:5-44
+MERGED from [androidx.lifecycle:lifecycle-runtime-ktx:2.7.0] /home/fogy/.gradle/caches/8.13/transforms/19e0d7e395e1dbf675a2fdfd47d71b2c/transformed/lifecycle-runtime-ktx-2.7.0/AndroidManifest.xml:20:5-44
+MERGED from [androidx.lifecycle:lifecycle-runtime-ktx:2.7.0] /home/fogy/.gradle/caches/8.13/transforms/19e0d7e395e1dbf675a2fdfd47d71b2c/transformed/lifecycle-runtime-ktx-2.7.0/AndroidManifest.xml:20:5-44
+MERGED from [androidx.cardview:cardview:1.0.0] /home/fogy/.gradle/caches/8.13/transforms/fd8856b0439801effa9fe2f52e21bdb4/transformed/cardview-1.0.0/AndroidManifest.xml:20:5-44
+MERGED from [androidx.cardview:cardview:1.0.0] /home/fogy/.gradle/caches/8.13/transforms/fd8856b0439801effa9fe2f52e21bdb4/transformed/cardview-1.0.0/AndroidManifest.xml:20:5-44
+MERGED from [androidx.cursoradapter:cursoradapter:1.0.0] /home/fogy/.gradle/caches/8.13/transforms/54b13c4115e583a13efbda29a0b31d2c/transformed/cursoradapter-1.0.0/AndroidManifest.xml:20:5-44
+MERGED from [androidx.cursoradapter:cursoradapter:1.0.0] /home/fogy/.gradle/caches/8.13/transforms/54b13c4115e583a13efbda29a0b31d2c/transformed/cursoradapter-1.0.0/AndroidManifest.xml:20:5-44
+MERGED from [androidx.interpolator:interpolator:1.0.0] /home/fogy/.gradle/caches/8.13/transforms/d861af9da55fbd20aa90f1286b2d79d7/transformed/interpolator-1.0.0/AndroidManifest.xml:20:5-44
+MERGED from [androidx.interpolator:interpolator:1.0.0] /home/fogy/.gradle/caches/8.13/transforms/d861af9da55fbd20aa90f1286b2d79d7/transformed/interpolator-1.0.0/AndroidManifest.xml:20:5-44
+MERGED from [androidx.versionedparcelable:versionedparcelable:1.1.1] /home/fogy/.gradle/caches/8.13/transforms/c3e57f4c46023e7e5360e27bb123508f/transformed/versionedparcelable-1.1.1/AndroidManifest.xml:20:5-22:41
+MERGED from [androidx.versionedparcelable:versionedparcelable:1.1.1] /home/fogy/.gradle/caches/8.13/transforms/c3e57f4c46023e7e5360e27bb123508f/transformed/versionedparcelable-1.1.1/AndroidManifest.xml:20:5-22:41
+MERGED from [androidx.arch.core:core-runtime:2.2.0] /home/fogy/.gradle/caches/8.13/transforms/670f5a0f59fedee2686eb02af3c7f718/transformed/core-runtime-2.2.0/AndroidManifest.xml:20:5-44
+MERGED from [androidx.arch.core:core-runtime:2.2.0] /home/fogy/.gradle/caches/8.13/transforms/670f5a0f59fedee2686eb02af3c7f718/transformed/core-runtime-2.2.0/AndroidManifest.xml:20:5-44
+MERGED from [androidx.profileinstaller:profileinstaller:1.3.0] /home/fogy/.gradle/caches/8.13/transforms/d9568865c7b519331093f5cd495897b1/transformed/profileinstaller-1.3.0/AndroidManifest.xml:21:5-44
+MERGED from [androidx.profileinstaller:profileinstaller:1.3.0] /home/fogy/.gradle/caches/8.13/transforms/d9568865c7b519331093f5cd495897b1/transformed/profileinstaller-1.3.0/AndroidManifest.xml:21:5-44
+MERGED from [androidx.startup:startup-runtime:1.1.1] /home/fogy/.gradle/caches/8.13/transforms/077f86f0c70a33c75916f39eccf72ec0/transformed/startup-runtime-1.1.1/AndroidManifest.xml:21:5-23:41
+MERGED from [androidx.startup:startup-runtime:1.1.1] /home/fogy/.gradle/caches/8.13/transforms/077f86f0c70a33c75916f39eccf72ec0/transformed/startup-runtime-1.1.1/AndroidManifest.xml:21:5-23:41
+MERGED from [androidx.tracing:tracing:1.0.0] /home/fogy/.gradle/caches/8.13/transforms/8fc5eb73fc87715fdcfc8f07ca5c56ca/transformed/tracing-1.0.0/AndroidManifest.xml:20:5-22:41
+MERGED from [androidx.tracing:tracing:1.0.0] /home/fogy/.gradle/caches/8.13/transforms/8fc5eb73fc87715fdcfc8f07ca5c56ca/transformed/tracing-1.0.0/AndroidManifest.xml:20:5-22:41
+MERGED from [androidx.documentfile:documentfile:1.0.0] /home/fogy/.gradle/caches/8.13/transforms/dbad86ee2397b2e0a54bda722e8aa3f0/transformed/documentfile-1.0.0/AndroidManifest.xml:20:5-44
+MERGED from [androidx.documentfile:documentfile:1.0.0] /home/fogy/.gradle/caches/8.13/transforms/dbad86ee2397b2e0a54bda722e8aa3f0/transformed/documentfile-1.0.0/AndroidManifest.xml:20:5-44
+MERGED from [androidx.localbroadcastmanager:localbroadcastmanager:1.0.0] /home/fogy/.gradle/caches/8.13/transforms/3e24fc6dd22df8ab244aeaf04f69b699/transformed/localbroadcastmanager-1.0.0/AndroidManifest.xml:20:5-44
+MERGED from [androidx.localbroadcastmanager:localbroadcastmanager:1.0.0] /home/fogy/.gradle/caches/8.13/transforms/3e24fc6dd22df8ab244aeaf04f69b699/transformed/localbroadcastmanager-1.0.0/AndroidManifest.xml:20:5-44
+MERGED from [androidx.print:print:1.0.0] /home/fogy/.gradle/caches/8.13/transforms/d9a111a0140dafef195fbd3d44621855/transformed/print-1.0.0/AndroidManifest.xml:20:5-44
+MERGED from [androidx.print:print:1.0.0] /home/fogy/.gradle/caches/8.13/transforms/d9a111a0140dafef195fbd3d44621855/transformed/print-1.0.0/AndroidManifest.xml:20:5-44
+MERGED from [androidx.annotation:annotation-experimental:1.3.0] /home/fogy/.gradle/caches/8.13/transforms/e733b27ad45f7403dc896b63b7013cf2/transformed/annotation-experimental-1.3.0/AndroidManifest.xml:20:5-44
+MERGED from [androidx.annotation:annotation-experimental:1.3.0] /home/fogy/.gradle/caches/8.13/transforms/e733b27ad45f7403dc896b63b7013cf2/transformed/annotation-experimental-1.3.0/AndroidManifest.xml:20:5-44
+	android:targetSdkVersion
+		INJECTED from /home/fogy/wifikeycontrol/android-app/app/src/main/AndroidManifest.xml
+	android:minSdkVersion
+		INJECTED from /home/fogy/wifikeycontrol/android-app/app/src/main/AndroidManifest.xml
+provider#androidx.startup.InitializationProvider
+ADDED from [androidx.emoji2:emoji2:1.2.0] /home/fogy/.gradle/caches/8.13/transforms/e008981857e292964294833b9cf08d17/transformed/emoji2-1.2.0/AndroidManifest.xml:24:9-32:20
+MERGED from [androidx.lifecycle:lifecycle-process:2.7.0] /home/fogy/.gradle/caches/8.13/transforms/cbb8138adef61fe73d3714dfa5d950dd/transformed/lifecycle-process-2.7.0/AndroidManifest.xml:24:9-32:20
+MERGED from [androidx.lifecycle:lifecycle-process:2.7.0] /home/fogy/.gradle/caches/8.13/transforms/cbb8138adef61fe73d3714dfa5d950dd/transformed/lifecycle-process-2.7.0/AndroidManifest.xml:24:9-32:20
+MERGED from [androidx.profileinstaller:profileinstaller:1.3.0] /home/fogy/.gradle/caches/8.13/transforms/d9568865c7b519331093f5cd495897b1/transformed/profileinstaller-1.3.0/AndroidManifest.xml:24:9-32:20
+MERGED from [androidx.profileinstaller:profileinstaller:1.3.0] /home/fogy/.gradle/caches/8.13/transforms/d9568865c7b519331093f5cd495897b1/transformed/profileinstaller-1.3.0/AndroidManifest.xml:24:9-32:20
+MERGED from [androidx.startup:startup-runtime:1.1.1] /home/fogy/.gradle/caches/8.13/transforms/077f86f0c70a33c75916f39eccf72ec0/transformed/startup-runtime-1.1.1/AndroidManifest.xml:26:9-30:34
+MERGED from [androidx.startup:startup-runtime:1.1.1] /home/fogy/.gradle/caches/8.13/transforms/077f86f0c70a33c75916f39eccf72ec0/transformed/startup-runtime-1.1.1/AndroidManifest.xml:26:9-30:34
+	tools:node
+		ADDED from [androidx.emoji2:emoji2:1.2.0] /home/fogy/.gradle/caches/8.13/transforms/e008981857e292964294833b9cf08d17/transformed/emoji2-1.2.0/AndroidManifest.xml:28:13-31
+	android:authorities
+		ADDED from [androidx.emoji2:emoji2:1.2.0] /home/fogy/.gradle/caches/8.13/transforms/e008981857e292964294833b9cf08d17/transformed/emoji2-1.2.0/AndroidManifest.xml:26:13-68
+	android:exported
+		ADDED from [androidx.emoji2:emoji2:1.2.0] /home/fogy/.gradle/caches/8.13/transforms/e008981857e292964294833b9cf08d17/transformed/emoji2-1.2.0/AndroidManifest.xml:27:13-37
+	android:name
+		ADDED from [androidx.emoji2:emoji2:1.2.0] /home/fogy/.gradle/caches/8.13/transforms/e008981857e292964294833b9cf08d17/transformed/emoji2-1.2.0/AndroidManifest.xml:25:13-67
+meta-data#androidx.emoji2.text.EmojiCompatInitializer
+ADDED from [androidx.emoji2:emoji2:1.2.0] /home/fogy/.gradle/caches/8.13/transforms/e008981857e292964294833b9cf08d17/transformed/emoji2-1.2.0/AndroidManifest.xml:29:13-31:52
+	android:value
+		ADDED from [androidx.emoji2:emoji2:1.2.0] /home/fogy/.gradle/caches/8.13/transforms/e008981857e292964294833b9cf08d17/transformed/emoji2-1.2.0/AndroidManifest.xml:31:17-49
+	android:name
+		ADDED from [androidx.emoji2:emoji2:1.2.0] /home/fogy/.gradle/caches/8.13/transforms/e008981857e292964294833b9cf08d17/transformed/emoji2-1.2.0/AndroidManifest.xml:30:17-75
+meta-data#androidx.lifecycle.ProcessLifecycleInitializer
+ADDED from [androidx.lifecycle:lifecycle-process:2.7.0] /home/fogy/.gradle/caches/8.13/transforms/cbb8138adef61fe73d3714dfa5d950dd/transformed/lifecycle-process-2.7.0/AndroidManifest.xml:29:13-31:52
+	android:value
+		ADDED from [androidx.lifecycle:lifecycle-process:2.7.0] /home/fogy/.gradle/caches/8.13/transforms/cbb8138adef61fe73d3714dfa5d950dd/transformed/lifecycle-process-2.7.0/AndroidManifest.xml:31:17-49
+	android:name
+		ADDED from [androidx.lifecycle:lifecycle-process:2.7.0] /home/fogy/.gradle/caches/8.13/transforms/cbb8138adef61fe73d3714dfa5d950dd/transformed/lifecycle-process-2.7.0/AndroidManifest.xml:30:17-78
+permission#${applicationId}.DYNAMIC_RECEIVER_NOT_EXPORTED_PERMISSION
+ADDED from [androidx.core:core:1.12.0] /home/fogy/.gradle/caches/8.13/transforms/c2191cd8642cf9c6b52e09b4fefef89d/transformed/core-1.12.0/AndroidManifest.xml:22:5-24:47
+	android:protectionLevel
+		ADDED from [androidx.core:core:1.12.0] /home/fogy/.gradle/caches/8.13/transforms/c2191cd8642cf9c6b52e09b4fefef89d/transformed/core-1.12.0/AndroidManifest.xml:24:9-44
+	android:name
+		ADDED from [androidx.core:core:1.12.0] /home/fogy/.gradle/caches/8.13/transforms/c2191cd8642cf9c6b52e09b4fefef89d/transformed/core-1.12.0/AndroidManifest.xml:23:9-81
+permission#com.wifikeycontrol.DYNAMIC_RECEIVER_NOT_EXPORTED_PERMISSION
+ADDED from [androidx.core:core:1.12.0] /home/fogy/.gradle/caches/8.13/transforms/c2191cd8642cf9c6b52e09b4fefef89d/transformed/core-1.12.0/AndroidManifest.xml:22:5-24:47
+	android:protectionLevel
+		ADDED from [androidx.core:core:1.12.0] /home/fogy/.gradle/caches/8.13/transforms/c2191cd8642cf9c6b52e09b4fefef89d/transformed/core-1.12.0/AndroidManifest.xml:24:9-44
+	android:name
+		ADDED from [androidx.core:core:1.12.0] /home/fogy/.gradle/caches/8.13/transforms/c2191cd8642cf9c6b52e09b4fefef89d/transformed/core-1.12.0/AndroidManifest.xml:23:9-81
+uses-permission#${applicationId}.DYNAMIC_RECEIVER_NOT_EXPORTED_PERMISSION
+ADDED from [androidx.core:core:1.12.0] /home/fogy/.gradle/caches/8.13/transforms/c2191cd8642cf9c6b52e09b4fefef89d/transformed/core-1.12.0/AndroidManifest.xml:26:5-97
+	android:name
+		ADDED from [androidx.core:core:1.12.0] /home/fogy/.gradle/caches/8.13/transforms/c2191cd8642cf9c6b52e09b4fefef89d/transformed/core-1.12.0/AndroidManifest.xml:26:22-94
+uses-permission#com.wifikeycontrol.DYNAMIC_RECEIVER_NOT_EXPORTED_PERMISSION
+ADDED from [androidx.core:core:1.12.0] /home/fogy/.gradle/caches/8.13/transforms/c2191cd8642cf9c6b52e09b4fefef89d/transformed/core-1.12.0/AndroidManifest.xml:26:5-97
+	android:name
+		ADDED from [androidx.core:core:1.12.0] /home/fogy/.gradle/caches/8.13/transforms/c2191cd8642cf9c6b52e09b4fefef89d/transformed/core-1.12.0/AndroidManifest.xml:26:22-94
+meta-data#androidx.profileinstaller.ProfileInstallerInitializer
+ADDED from [androidx.profileinstaller:profileinstaller:1.3.0] /home/fogy/.gradle/caches/8.13/transforms/d9568865c7b519331093f5cd495897b1/transformed/profileinstaller-1.3.0/AndroidManifest.xml:29:13-31:52
+	android:value
+		ADDED from [androidx.profileinstaller:profileinstaller:1.3.0] /home/fogy/.gradle/caches/8.13/transforms/d9568865c7b519331093f5cd495897b1/transformed/profileinstaller-1.3.0/AndroidManifest.xml:31:17-49
+	android:name
+		ADDED from [androidx.profileinstaller:profileinstaller:1.3.0] /home/fogy/.gradle/caches/8.13/transforms/d9568865c7b519331093f5cd495897b1/transformed/profileinstaller-1.3.0/AndroidManifest.xml:30:17-85
+receiver#androidx.profileinstaller.ProfileInstallReceiver
+ADDED from [androidx.profileinstaller:profileinstaller:1.3.0] /home/fogy/.gradle/caches/8.13/transforms/d9568865c7b519331093f5cd495897b1/transformed/profileinstaller-1.3.0/AndroidManifest.xml:34:9-52:20
+	android:enabled
+		ADDED from [androidx.profileinstaller:profileinstaller:1.3.0] /home/fogy/.gradle/caches/8.13/transforms/d9568865c7b519331093f5cd495897b1/transformed/profileinstaller-1.3.0/AndroidManifest.xml:37:13-35
+	android:exported
+		ADDED from [androidx.profileinstaller:profileinstaller:1.3.0] /home/fogy/.gradle/caches/8.13/transforms/d9568865c7b519331093f5cd495897b1/transformed/profileinstaller-1.3.0/AndroidManifest.xml:38:13-36
+	android:permission
+		ADDED from [androidx.profileinstaller:profileinstaller:1.3.0] /home/fogy/.gradle/caches/8.13/transforms/d9568865c7b519331093f5cd495897b1/transformed/profileinstaller-1.3.0/AndroidManifest.xml:39:13-57
+	android:directBootAware
+		ADDED from [androidx.profileinstaller:profileinstaller:1.3.0] /home/fogy/.gradle/caches/8.13/transforms/d9568865c7b519331093f5cd495897b1/transformed/profileinstaller-1.3.0/AndroidManifest.xml:36:13-44
+	android:name
+		ADDED from [androidx.profileinstaller:profileinstaller:1.3.0] /home/fogy/.gradle/caches/8.13/transforms/d9568865c7b519331093f5cd495897b1/transformed/profileinstaller-1.3.0/AndroidManifest.xml:35:13-76
+intent-filter#action:name:androidx.profileinstaller.action.INSTALL_PROFILE
+ADDED from [androidx.profileinstaller:profileinstaller:1.3.0] /home/fogy/.gradle/caches/8.13/transforms/d9568865c7b519331093f5cd495897b1/transformed/profileinstaller-1.3.0/AndroidManifest.xml:40:13-42:29
+action#androidx.profileinstaller.action.INSTALL_PROFILE
+ADDED from [androidx.profileinstaller:profileinstaller:1.3.0] /home/fogy/.gradle/caches/8.13/transforms/d9568865c7b519331093f5cd495897b1/transformed/profileinstaller-1.3.0/AndroidManifest.xml:41:17-91
+	android:name
+		ADDED from [androidx.profileinstaller:profileinstaller:1.3.0] /home/fogy/.gradle/caches/8.13/transforms/d9568865c7b519331093f5cd495897b1/transformed/profileinstaller-1.3.0/AndroidManifest.xml:41:25-88
+intent-filter#action:name:androidx.profileinstaller.action.SKIP_FILE
+ADDED from [androidx.profileinstaller:profileinstaller:1.3.0] /home/fogy/.gradle/caches/8.13/transforms/d9568865c7b519331093f5cd495897b1/transformed/profileinstaller-1.3.0/AndroidManifest.xml:43:13-45:29
+action#androidx.profileinstaller.action.SKIP_FILE
+ADDED from [androidx.profileinstaller:profileinstaller:1.3.0] /home/fogy/.gradle/caches/8.13/transforms/d9568865c7b519331093f5cd495897b1/transformed/profileinstaller-1.3.0/AndroidManifest.xml:44:17-85
+	android:name
+		ADDED from [androidx.profileinstaller:profileinstaller:1.3.0] /home/fogy/.gradle/caches/8.13/transforms/d9568865c7b519331093f5cd495897b1/transformed/profileinstaller-1.3.0/AndroidManifest.xml:44:25-82
+intent-filter#action:name:androidx.profileinstaller.action.SAVE_PROFILE
+ADDED from [androidx.profileinstaller:profileinstaller:1.3.0] /home/fogy/.gradle/caches/8.13/transforms/d9568865c7b519331093f5cd495897b1/transformed/profileinstaller-1.3.0/AndroidManifest.xml:46:13-48:29
+action#androidx.profileinstaller.action.SAVE_PROFILE
+ADDED from [androidx.profileinstaller:profileinstaller:1.3.0] /home/fogy/.gradle/caches/8.13/transforms/d9568865c7b519331093f5cd495897b1/transformed/profileinstaller-1.3.0/AndroidManifest.xml:47:17-88
+	android:name
+		ADDED from [androidx.profileinstaller:profileinstaller:1.3.0] /home/fogy/.gradle/caches/8.13/transforms/d9568865c7b519331093f5cd495897b1/transformed/profileinstaller-1.3.0/AndroidManifest.xml:47:25-85
+intent-filter#action:name:androidx.profileinstaller.action.BENCHMARK_OPERATION
+ADDED from [androidx.profileinstaller:profileinstaller:1.3.0] /home/fogy/.gradle/caches/8.13/transforms/d9568865c7b519331093f5cd495897b1/transformed/profileinstaller-1.3.0/AndroidManifest.xml:49:13-51:29
+action#androidx.profileinstaller.action.BENCHMARK_OPERATION
+ADDED from [androidx.profileinstaller:profileinstaller:1.3.0] /home/fogy/.gradle/caches/8.13/transforms/d9568865c7b519331093f5cd495897b1/transformed/profileinstaller-1.3.0/AndroidManifest.xml:50:17-95
+	android:name
+		ADDED from [androidx.profileinstaller:profileinstaller:1.3.0] /home/fogy/.gradle/caches/8.13/transforms/d9568865c7b519331093f5cd495897b1/transformed/profileinstaller-1.3.0/AndroidManifest.xml:50:25-92
