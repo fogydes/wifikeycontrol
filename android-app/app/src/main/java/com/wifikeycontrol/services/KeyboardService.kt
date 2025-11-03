@@ -99,7 +99,7 @@ class KeyboardService : InputMethodService() {
         Log.d(TAG, "Input method unbound")
     }
 
-    override fun onStartInputView(info: EditorInfo?, restarting: Boolean) {
+    override fun onStartInputView(info: EditorInfo, restarting: Boolean) {
         super.onStartInputView(info, restarting)
         Log.d(TAG, "Input view started")
 
