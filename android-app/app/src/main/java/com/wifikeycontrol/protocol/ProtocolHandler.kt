@@ -130,7 +130,7 @@ class ProtocolHandler {
                 "control_return" -> createControlReturnPacket(eventData, timestamp)
                 else -> {
                     // Fallback to JSON
-                    createJsonPacket(eventData)
+                    createJsonPacket(JSONObject(eventData).toString().toByteArray())
                 }
             }
         } catch (e: Exception) {
@@ -388,8 +388,7 @@ class ProtocolHandler {
 
         val receivedChecksum = ByteBuffer.wrap(packet)
             .order(ByteOrder.LITTLE_ENDIAN)
-            .position(packet.size - 2)
-            .short.toInt() and 0xFFFF
+            .getShort(packet.size - 2).toInt() and 0xFFFF
 
         val calculatedChecksum = calculateChecksum(packet.copyOfRange(0, packet.size - 2))
         return receivedChecksum == calculatedChecksum
