@@ -12,11 +12,8 @@
     <uses-permission android:name="android.permission.FOREGROUND_SERVICE" />
     <uses-permission android:name="android.permission.POST_NOTIFICATIONS" />
 
-    <!-- Accessibility service permissions -->
-    <uses-permission android:name="android.permission.BIND_ACCESSIBILITY_SERVICE" />
-
-    <!-- Input method service permissions -->
-    <uses-permission android:name="android.permission.BIND_INPUT_METHOD" />
+    <!-- Note: BIND_ACCESSIBILITY_SERVICE and BIND_INPUT_METHOD permissions
+     are granted through service declarations, not uses-permission tags -->
 
     <!-- System settings and overlay permissions -->
     <uses-permission android:name="android.permission.SYSTEM_ALERT_WINDOW" />
