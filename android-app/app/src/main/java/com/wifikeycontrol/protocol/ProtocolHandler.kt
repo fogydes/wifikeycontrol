@@ -5,6 +5,7 @@ import org.json.JSONObject
 import java.nio.ByteBuffer
 import java.nio.ByteOrder
 import java.util.zip.Inflater
+import java.io.ByteArrayOutputStream
 import kotlin.experimental.and
 
 class ProtocolHandler {
