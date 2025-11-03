@@ -84,13 +84,8 @@ class KeyboardService : InputMethodService() {
         ContextCompat.registerReceiver(this, keyEventReceiver, filter, ContextCompat.RECEIVER_NOT_EXPORTED)
     }
 
-    override fun onCreateInputMethodInterface(): AbstractInputMethodService.AbstractInputMethodSessionImpl {
-        return MyInputMethodSession()
-    }
-
-    override fun onCreateInputMethodSession(): AbstractInputMethodService.AbstractInputMethodSessionImpl {
-        return MyInputMethodSession()
-    }
+    // These methods are deprecated in newer Android versions
+    // We'll handle input session events through standard lifecycle methods
 
     override fun onBindInput() {
         super.onBindInput()
