@@ -40,6 +40,8 @@ captures/
 *.pem
 *.p12
 *.key
+*.pub
+yes
 
 # OS/editor junk
 .DS_Store
