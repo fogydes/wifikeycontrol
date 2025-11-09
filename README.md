@@ -1,6 +1,6 @@
 # WiFi Key Control
 
-Control your Android phone using your PC's keyboard and mouse, either wirelessly (Wi-Fi/LAN) or wired (USB/OTG). The goal is to make the phone behave exactly as if a physical keyboard and mouse were connected via an OTG adapter — but done wirelessly or through a lightweight wired bridge.
+Control your Android phone using your PC's keyboard and mouse, either wirelessly (Wi-Fi/LAN) or wired (USB/OTG). The goal is to make the phone behave exactly as if a physical keyboard and mouse were connected via an OTG adapter, but done wirelessly or through a lightweight wired bridge.
 
 ## Overview
 
