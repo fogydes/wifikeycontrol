@@ -26,6 +26,7 @@ class ProtocolHandler {
         private const val TYPE_GESTURE_END = 0x06
         private const val TYPE_CONTROL_SWITCH = 0x07
         private const val TYPE_HEARTBEAT = 0x08
+        private const val TYPE_MOUSE_MOVE_RELATIVE = 0x09
         private const val TYPE_JSON = 0xFF
         private const val TYPE_BATCH = 0xFE
 
@@ -102,6 +103,7 @@ class ProtocolHandler {
                 TYPE_SCROLL_EVENT -> parseScrollPacket(finalPayload)
                 TYPE_CONTROL_SWITCH -> parseControlSwitchPacket(finalPayload)
                 TYPE_HEARTBEAT -> parseHeartbeatPacket(finalPayload)
+                TYPE_MOUSE_MOVE_RELATIVE -> parseMouseMoveRelativePacket(finalPayload)
                 TYPE_JSON -> parseJsonPacket(finalPayload)
                 TYPE_BATCH -> parseBatchPacket(finalPayload)
                 else -> {
@@ -206,8 +208,8 @@ class ProtocolHandler {
         val sequence = buffer.short.toInt() and 0xFFFF
         val x = buffer.int
         val y = buffer.int
-        val dx = buffer.short.toInt() and 0xFFFF
-        val dy = buffer.short.toInt() and 0xFFFF
+        val dx = buffer.short.toInt()
+        val dy = buffer.short.toInt()
         val timestamp = buffer.long
 
         return mapOf(
@@ -248,6 +250,22 @@ class ProtocolHandler {
         return mapOf(
             "type" to "heartbeat",
             "sequence" to sequence,
+            "timestamp" to timestamp
+        )
+    }
+
+    private fun parseMouseMoveRelativePacket(payload: ByteArray): Map<String, Any> {
+        val buffer = ByteBuffer.wrap(payload).order(ByteOrder.LITTLE_ENDIAN)
+        val sequence = buffer.short.toInt() and 0xFFFF
+        val dx = buffer.short.toInt()
+        val dy = buffer.short.toInt()
+        val timestamp = buffer.long
+
+        return mapOf(
+            "type" to "mouse_move_relative",
+            "sequence" to sequence,
+            "dx" to dx,
+            "dy" to dy,
             "timestamp" to timestamp
         )
     }

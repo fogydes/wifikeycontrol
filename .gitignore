@@ -59,3 +59,20 @@ local.properties
 
 # Kotlin
 .kotlin/
+
+# Python
+__pycache__/
+*.pyc
+*.pyo
+*.pyd
+.Python
+env/
+venv/
+venv_test/
+.pytest_cache/
+get-pip.py
+pip-wheel-metadata/
+.env
+
+# JetBrains
+.idea/

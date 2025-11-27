@@ -56,6 +56,19 @@ class MainActivity : AppCompatActivity() {
         }
     }
 
+    // BroadcastReceiver for invitations
+    private val invitationReceiver = object : BroadcastReceiver() {
+        override fun onReceive(context: Context?, intent: Intent?) {
+            if (intent?.action == ConnectionService.ACTION_INVITATION_RECEIVED) {
+                val pcName = intent.getStringExtra(ConnectionService.EXTRA_PC_NAME) ?: "Unknown PC"
+                val ip = intent.getStringExtra(ConnectionService.EXTRA_SERVER_IP) ?: ""
+                val port = intent.getIntExtra(ConnectionService.EXTRA_SERVER_PORT, 12346)
+                
+                showInvitationDialog(pcName, ip, port)
+            }
+        }
+    }
+
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
         setContentView(R.layout.activity_main)
@@ -76,11 +89,32 @@ class MainActivity : AppCompatActivity() {
             ContextCompat.RECEIVER_NOT_EXPORTED
         )
 
+        // Register for invitations
+        ContextCompat.registerReceiver(
+            this,
+            invitationReceiver,
+            IntentFilter(ConnectionService.ACTION_INVITATION_RECEIVED),
+            ContextCompat.RECEIVER_NOT_EXPORTED
+        )
+
         // Check and request permissions
         checkPermissions()
 
         // Load saved settings
         loadSettings()
+
+        // Read persisted connection state (in case the service connected before Activity registered)
+        try {
+            val prefs = getSharedPreferences("wifikeycontrol_prefs", MODE_PRIVATE)
+            val connected = prefs.getBoolean("is_connected", false)
+            val deviceName = prefs.getString("device_name", "") ?: ""
+            if (connected) {
+                // Update UI to reflect current connection state
+                updateConnectionStatus(true, deviceName, "")
+            }
+        } catch (e: Exception) {
+            Log.w(TAG, "Failed to read persisted connection state: ${e.message}")
+        }
     }
 
     override fun onDestroy() {
@@ -89,6 +123,7 @@ class MainActivity : AppCompatActivity() {
 
         // Unregister receiver
         unregisterReceiver(connectionStatusReceiver)
+        unregisterReceiver(invitationReceiver)
 
         // Save settings
         saveSettings()
@@ -354,6 +389,43 @@ class MainActivity : AppCompatActivity() {
             .setTitle("Settings")
             .setMessage("Settings dialog will be implemented in Phase 3")
             .setPositiveButton("OK", null)
+            .show()
+    }
+
+    private fun showInvitationDialog(pcName: String, ip: String, port: Int) {
+        val checkbox = CheckBox(this).apply {
+            text = "Always allow devices from this PC"
+            isChecked = false
+        }
+        
+        val container = FrameLayout(this).apply {
+            val params = FrameLayout.LayoutParams(
+                FrameLayout.LayoutParams.MATCH_PARENT,
+                FrameLayout.LayoutParams.WRAP_CONTENT
+            )
+            params.leftMargin = resources.getDimensionPixelSize(R.dimen.activity_horizontal_margin)
+            params.rightMargin = resources.getDimensionPixelSize(R.dimen.activity_horizontal_margin)
+            addView(checkbox, params)
+        }
+
+        AlertDialog.Builder(this)
+            .setTitle("Connection Request")
+            .setMessage("$pcName ($ip) wants to connect.")
+            .setView(container)
+            .setPositiveButton("Accept") { _, _ ->
+                if (checkbox.isChecked) {
+                    val prefs = getSharedPreferences("wifikeycontrol_prefs", MODE_PRIVATE)
+                    val trustedDevices = prefs.getStringSet("trusted_devices", mutableSetOf()) ?: mutableSetOf()
+                    val newTrusted = trustedDevices.toMutableSet()
+                    newTrusted.add("$pcName@$ip")
+                    prefs.edit().putStringSet("trusted_devices", newTrusted).apply()
+                    addLog("Added $pcName to trusted devices")
+                }
+                connectToServer(ip, port)
+            }
+            .setNegativeButton("Deny") { _, _ ->
+                addLog("Connection request from $pcName denied")
+            }
             .show()
     }
 

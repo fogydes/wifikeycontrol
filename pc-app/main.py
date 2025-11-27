@@ -6,7 +6,8 @@ import os
 from PyQt5.QtWidgets import (QApplication, QMainWindow, QWidget, QVBoxLayout,
                              QHBoxLayout, QPushButton, QLabel, QStatusBar,
                              QGroupBox, QGridLayout, QTextEdit, QSplitter,
-                             QMenuBar, QAction, QMessageBox, QDialog)
+                             QMenuBar, QAction, QMessageBox, QDialog,
+                             QTabWidget, QTableWidget, QTableWidgetItem, QHeaderView)
 from PyQt5.QtCore import Qt, QThread, pyqtSignal, QTimer
 from PyQt5.QtGui import QFont, QIcon, QPixmap
 
@@ -82,7 +83,14 @@ class WiFiKeyControl(QMainWindow):
         panel = QWidget()
         layout = QVBoxLayout(panel)
 
-        # Connection Status Group
+        # Create Tab Widget
+        self.tabs = QTabWidget()
+        
+        # Tab 1: Dashboard (Existing controls)
+        self.dashboard_tab = QWidget()
+        dashboard_layout = QVBoxLayout(self.dashboard_tab)
+        
+        # -- existing status group --
         status_group = QGroupBox("Connection Status")
         status_layout = QVBoxLayout(status_group)
 
@@ -92,7 +100,7 @@ class WiFiKeyControl(QMainWindow):
         status_layout.addWidget(self.status_label)
         status_layout.addWidget(self.device_label)
 
-        # Server Controls Group
+        # -- existing server controls group --
         server_group = QGroupBox("Server Controls")
         server_layout = QGridLayout(server_group)
 
@@ -112,7 +120,7 @@ class WiFiKeyControl(QMainWindow):
         server_layout.addWidget(self.stop_button, 0, 1)
         server_layout.addWidget(self.discover_button, 1, 0, 1, 2)
 
-        # Settings Group
+        # -- existing settings group --
         settings_group = QGroupBox("Settings")
         settings_layout = QGridLayout(settings_group)
 
@@ -126,7 +134,12 @@ class WiFiKeyControl(QMainWindow):
         self.discovery_port_edit.setStyleSheet("border: 1px solid gray; padding: 4px;")
         settings_layout.addWidget(self.discovery_port_edit, 1, 1)
 
-        # Input Control Group
+        settings_layout.addWidget(QLabel("PC IP:"), 2, 0)
+        self.ip_label = QLabel(self.get_local_ip())
+        self.ip_label.setStyleSheet("border: 1px solid gray; padding: 4px;")
+        settings_layout.addWidget(self.ip_label, 2, 1)
+
+        # -- existing input control group --
         input_group = QGroupBox("Input Control")
         input_layout = QVBoxLayout(input_group)
 
@@ -140,14 +153,58 @@ class WiFiKeyControl(QMainWindow):
 
         input_layout.addWidget(self.toggle_capture_button)
 
-        # Add groups to layout
-        layout.addWidget(status_group)
-        layout.addWidget(server_group)
-        layout.addWidget(settings_group)
-        layout.addWidget(input_group)
-        layout.addStretch()
+        dashboard_layout.addWidget(status_group)
+        dashboard_layout.addWidget(server_group)
+        dashboard_layout.addWidget(settings_group)
+        dashboard_layout.addWidget(input_group)
+        dashboard_layout.addStretch()
 
+        # Tab 2: Discovered Devices
+        self.devices_tab = QWidget()
+        devices_layout = QVBoxLayout(self.devices_tab)
+        
+        self.device_table = QTableWidget()
+        self.device_table.setColumnCount(3)
+        self.device_table.setHorizontalHeaderLabels(["Device Name", "IP Address", "Status"])
+        self.device_table.horizontalHeader().setSectionResizeMode(0, QHeaderView.Stretch)
+        self.device_table.horizontalHeader().setSectionResizeMode(1, QHeaderView.ResizeToContents)
+        self.device_table.setSelectionBehavior(QTableWidget.SelectRows)
+        self.device_table.setSelectionMode(QTableWidget.SingleSelection)
+        self.device_table.setEditTriggers(QTableWidget.NoEditTriggers)
+        self.device_table.doubleClicked.connect(self.connect_selected_device)
+        
+        devices_layout.addWidget(self.device_table)
+        
+        self.connect_device_button = QPushButton("Connect to Selected")
+        self.connect_device_button.clicked.connect(self.connect_selected_device)
+        self.connect_device_button.setStyleSheet("QPushButton { background-color: #2196F3; color: white; font-weight: bold; padding: 8px; }")
+        devices_layout.addWidget(self.connect_device_button)
+
+        # Add tabs to widget
+        self.tabs.addTab(self.dashboard_tab, "Dashboard")
+        self.tabs.addTab(self.devices_tab, "Discovered Devices")
+
+        layout.addWidget(self.tabs)
         return panel
+
+    def connect_selected_device(self):
+        """Initiate connection to the selected device in the table"""
+        current_row = self.device_table.currentRow()
+        if current_row < 0:
+            QMessageBox.warning(self, "No Selection", "Please select a device to connect to.")
+            return
+            
+        ip_item = self.device_table.item(current_row, 1)
+        name_item = self.device_table.item(current_row, 0)
+        
+        if ip_item and name_item:
+            ip = ip_item.text()
+            name = name_item.text()
+            
+            # Send invitation
+            self.log_message(f"Sending connection invitation to {name} ({ip})...")
+            self.connection_manager.send_invite(ip)
+            QMessageBox.information(self, "Invitation Sent", f"Invitation sent to {name}.\nPlease accept the request on your Android device.")
 
     def create_log_panel(self):
         panel = QWidget()
@@ -211,14 +268,34 @@ class WiFiKeyControl(QMainWindow):
         self.connection_manager.status_changed.connect(self.on_connection_status_changed)
         self.connection_manager.device_discovered.connect(self.on_device_discovered)
         self.connection_manager.log_message.connect(self.log_message)
+        self.connection_manager.control_returned.connect(self.input_capture.return_control_to_pc)
 
         self.input_capture.input_event.connect(self.on_input_event)
         self.input_capture.log_message.connect(self.log_message)
+
+    def get_local_ip(self) -> str:
+        """Return the local IP address used for outbound connections, or '127.0.0.1' as fallback."""
+        import socket
+        try:
+            s = socket.socket(socket.AF_INET, socket.SOCK_DGRAM)
+            # doesn't have to be reachable
+            s.connect(('8.8.8.8', 80))
+            ip = s.getsockname()[0]
+            s.close()
+            return ip
+        except Exception:
+            return '127.0.0.1'
 
     def start_server(self):
         try:
             port = int(self.port_edit.text())
             discovery_port = int(self.discovery_port_edit.text())
+
+            # Update screen dimensions before starting
+            self.connection_manager.set_screen_dimensions(
+                self.input_capture.screen_width,
+                self.input_capture.screen_height
+            )
 
             if self.connection_manager.start_server(port, discovery_port):
                 self.start_button.setEnabled(False)
@@ -284,7 +361,33 @@ class WiFiKeyControl(QMainWindow):
                 self.toggle_input_capture()
 
     def on_device_discovered(self, device_info):
-        self.log_message(f"Device discovered: {device_info['name']} at {device_info['ip']}")
+        # Be defensive: discovery responses may omit `name` or `ip` fields.
+        name = device_info.get('name') or device_info.get('device_name') or device_info.get('hostname')
+        ip = device_info.get('ip') or device_info.get('address') or 'unknown'
+        display_name = name if name else f"Android Device ({ip})"
+        
+        # Update Table
+        row_count = self.device_table.rowCount()
+        found_row = -1
+        for i in range(row_count):
+            item = self.device_table.item(i, 1) # Check IP column
+            if item and item.text() == ip:
+                found_row = i
+                break
+        
+        if found_row == -1:
+            # Add new row
+            row = row_count
+            self.device_table.insertRow(row)
+            self.device_table.setItem(row, 0, QTableWidgetItem(display_name))
+            self.device_table.setItem(row, 1, QTableWidgetItem(ip))
+            self.device_table.setItem(row, 2, QTableWidgetItem("Available"))
+            self.log_message(f"New device discovered: {display_name} at {ip}")
+        else:
+            # Update existing row (optional, e.g. name change)
+            self.device_table.setItem(found_row, 0, QTableWidgetItem(display_name))
+            # Flash or update status if needed
+            pass
 
     def on_input_event(self, event_data):
         if self.connection_manager.is_connected():
@@ -296,6 +399,13 @@ class WiFiKeyControl(QMainWindow):
         if self.connection_manager.is_connected():
             status = self.connection_manager.get_status()
             self.on_connection_status_changed(status['connected'], status['device_name'])
+
+        # Update displayed IP in case network changed
+        try:
+            self.ip_label.setText(self.get_local_ip())
+        except Exception:
+            pass
+
 
     def log_message(self, message):
         from datetime import datetime
@@ -343,3 +453,5 @@ def main():
 
 if __name__ == "__main__":
     main()
+
+    

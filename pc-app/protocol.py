@@ -19,7 +19,17 @@ class ProtocolHandler:
         'GESTURE_START': 0x05,
         'GESTURE_END': 0x06,
         'CONTROL_SWITCH': 0x07,
-        'HEARTBEAT': 0x08
+        'HEARTBEAT': 0x08,
+        'MOUSE_MOVE_RELATIVE': 0x09,
+        # Common runtime event type strings (snake_case) used by InputCapture
+        'mouse_move': 0x01,
+        'mouse_click': 0x02,
+        'key_press': 0x03,
+        'key_release': 0x03,
+        'mouse_scroll': 0x04,
+        'control_switch': 0x07,
+        'heartbeat': 0x08,
+        'mouse_move_relative': 0x09
     }
 
     # Mouse buttons
@@ -59,6 +69,8 @@ class ProtocolHandler:
         # Create packet based on type
         if packet_type == 'mouse_move':
             packet = self.create_mouse_movement_packet(event_data, timestamp)
+        elif packet_type == 'mouse_move_relative':
+            packet = self.create_mouse_move_relative_packet(event_data, timestamp)
         elif packet_type == 'mouse_click':
             packet = self.create_mouse_click_packet(event_data, timestamp)
         elif packet_type in ['key_press', 'key_release']:
@@ -77,16 +89,32 @@ class ProtocolHandler:
         x = int(event_data.get('x', 0))
         y = int(event_data.get('y', 0))
 
-        # Packet structure: [HEADER:2][TYPE:1][SEQ:2][X:4][Y:4][TIMESTAMP:8][CHECKSUM:2]
+        # Packet structure: [SEQ:2][X:4(signed)][Y:4(signed)][TIMESTAMP:8]
         payload = struct.pack(
-            '<HHIIQ',
+            '<HiiQ',
             self.packet_sequence,  # Sequence number
-            x,  # X coordinate
-            y,  # Y coordinate
+            x,  # X coordinate (signed)
+            y,  # Y coordinate (signed)
             timestamp  # Timestamp
         )
 
         return self.build_packet(0x01, payload)
+
+    def create_mouse_move_relative_packet(self, event_data: Dict, timestamp: int) -> bytes:
+        """Create a relative mouse movement packet"""
+        dx = int(event_data.get('dx', 0))
+        dy = int(event_data.get('dy', 0))
+
+        # Packet structure: [SEQ:2][DX:2(signed)][DY:2(signed)][TIMESTAMP:8]
+        payload = struct.pack(
+            '<HhhQ',
+            self.packet_sequence,  # Sequence number
+            dx,  # DX (signed)
+            dy,  # DY (signed)
+            timestamp  # Timestamp
+        )
+
+        return self.build_packet(0x09, payload)
 
     def create_mouse_click_packet(self, event_data: Dict, timestamp: int) -> bytes:
         """Create a mouse click packet"""
@@ -98,12 +126,12 @@ class ProtocolHandler:
         button_byte = self.MOUSE_BUTTONS.get(button, 0x01)
         state_byte = 0x01 if pressed else 0x00
 
-        # Packet structure: [HEADER:2][TYPE:1][SEQ:2][X:4][Y:4][BUTTON:1][STATE:1][TIMESTAMP:8][CHECKSUM:2]
+        # Packet structure: [SEQ:2][X:4(signed)][Y:4(signed)][BUTTON:1][STATE:1][TIMESTAMP:8]
         payload = struct.pack(
-            '<HIIIBBQ',
+            '<HiiBBQ',
             self.packet_sequence,  # Sequence number
-            x,  # X coordinate
-            y,  # Y coordinate
+            x,  # X coordinate (signed)
+            y,  # Y coordinate (signed)
             button_byte,  # Button
             state_byte,  # Pressed state
             timestamp  # Timestamp
@@ -124,9 +152,9 @@ class ProtocolHandler:
         state_byte = 0x01 if pressed else 0x00
         modifiers_byte = 0x00  # TODO: Implement modifier detection
 
-        # Packet structure: [HEADER:2][TYPE:1][SEQ:2][KEYCODE:4][STATE:1][MODIFIERS:1][KEY:16][TIMESTAMP:8][CHECKSUM:2]
+        # Packet structure: [SEQ:2][KEYCODE:4][STATE:1][MODIFIERS:1][KEY:16][TIMESTAMP:8]
         payload = struct.pack(
-            '<HIBBB16sQ',
+            '<HIBB16sQ',
             self.packet_sequence,  # Sequence number
             key_code,  # Key code
             state_byte,  # Pressed state
@@ -144,14 +172,14 @@ class ProtocolHandler:
         dx = int(event_data.get('dx', 0))
         dy = int(event_data.get('dy', 0))
 
-        # Packet structure: [HEADER:2][TYPE:1][SEQ:2][X:4][Y:4][DX:2][DY:2][TIMESTAMP:8][CHECKSUM:2]
+        # Packet structure: [SEQ:2][X:4(signed)][Y:4(signed)][DX:2(signed)][DY:2(signed)][TIMESTAMP:8]
         payload = struct.pack(
-            '<HIIHHHQ',
+            '<HiihhQ',
             self.packet_sequence,  # Sequence number
-            x,  # X coordinate
-            y,  # Y coordinate
-            dx,  # Scroll X delta
-            dy,  # Scroll Y delta
+            x,  # X coordinate (signed)
+            y,  # Y coordinate (signed)
+            dx,  # Scroll X delta (signed)
+            dy,  # Scroll Y delta (signed)
             timestamp  # Timestamp
         )
 
@@ -162,9 +190,9 @@ class ProtocolHandler:
         edge = event_data.get('edge', 'left')
         edge_byte = self.CONTROL_EDGES.get(edge, 0x01)
 
-        # Packet structure: [HEADER:2][TYPE:1][SEQ:2][EDGE:1][RESERVED:3][TIMESTAMP:8][CHECKSUM:2]
+        # Packet structure: [SEQ:2][EDGE:1][RESERVED:3][TIMESTAMP:8]
         payload = struct.pack(
-            '<HBBBQ',
+            '<HBBBBQ',
             self.packet_sequence,  # Sequence number
             edge_byte,  # Edge
             0x00,  # Reserved
@@ -291,12 +319,12 @@ class ProtocolHandler:
                 return self.parse_json_packet(payload)
             else:
                 return None
-        except:
+        except Exception:
             return None
 
     def parse_mouse_movement_packet(self, payload: bytes) -> Dict:
         """Parse mouse movement packet"""
-        seq, x, y, timestamp = struct.unpack('<HIIQ', payload)
+        seq, x, y, timestamp = struct.unpack('<HiiQ', payload)
         return {
             'type': 'mouse_move',
             'sequence': seq,
@@ -307,7 +335,7 @@ class ProtocolHandler:
 
     def parse_mouse_click_packet(self, payload: bytes) -> Dict:
         """Parse mouse click packet"""
-        seq, x, y, button, state, timestamp = struct.unpack('<HIIIBBQ', payload)
+        seq, x, y, button, state, timestamp = struct.unpack('<HiiBBQ', payload)
         button_name = 'unknown'
         for name, code in self.MOUSE_BUTTONS.items():
             if code == button:
@@ -326,7 +354,7 @@ class ProtocolHandler:
 
     def parse_keyboard_packet(self, payload: bytes) -> Dict:
         """Parse keyboard packet"""
-        seq, key_code, state, modifiers, key_bytes, timestamp = struct.unpack('<HIBBB16sQ', payload)
+        seq, key_code, state, modifiers, key_bytes, timestamp = struct.unpack('<HIBB16sQ', payload)
         key_str = key_bytes.rstrip(b'\x00').decode('utf-8', errors='ignore')
 
         event_type = 'key_press' if state == 0x01 else 'key_release'
@@ -343,7 +371,7 @@ class ProtocolHandler:
 
     def parse_scroll_packet(self, payload: bytes) -> Dict:
         """Parse scroll packet"""
-        seq, x, y, dx, dy, timestamp = struct.unpack('<HIIHHHQ', payload)
+        seq, x, y, dx, dy, timestamp = struct.unpack('<HiihhQ', payload)
         return {
             'type': 'mouse_scroll',
             'sequence': seq,
@@ -356,7 +384,7 @@ class ProtocolHandler:
 
     def parse_control_switch_packet(self, payload: bytes) -> Dict:
         """Parse control switch packet"""
-        seq, edge, reserved1, reserved2, reserved3, timestamp = struct.unpack('<HBBBQ', payload)
+        seq, edge, reserved1, reserved2, reserved3, timestamp = struct.unpack('<HBBBBQ', payload)
         edge_name = 'unknown'
         for name, code in self.CONTROL_EDGES.items():
             if code == edge:

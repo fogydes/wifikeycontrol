@@ -6,6 +6,8 @@ import time
 import json
 import struct
 import hashlib
+import psutil
+import ipaddress
 from PyQt5.QtCore import QObject, pyqtSignal
 from typing import Optional, Dict, List
 
@@ -14,6 +16,7 @@ class ConnectionManager(QObject):
     status_changed = pyqtSignal(bool, str)
     device_discovered = pyqtSignal(dict)
     log_message = pyqtSignal(str)
+    control_returned = pyqtSignal()
 
     def __init__(self):
         super().__init__()
@@ -22,12 +25,15 @@ class ConnectionManager(QObject):
         self.client_socket = None
         self.client_address = None
         self.client_thread = None
+        self.client_handler_thread = None
         self.discovery_thread = None
         self.heartbeat_thread = None
 
         self.server_running = False
         self.connected = False
         self.device_name = ""
+        self.screen_width = 1920
+        self.screen_height = 1080
 
         self.server_port = 12346
         self.discovery_port = 12345
@@ -35,10 +41,34 @@ class ConnectionManager(QObject):
         # Protocol constants
         self.DISCOVERY_MESSAGE = b"WIFIKEY_DISCOVERY"
         self.DISCOVERY_RESPONSE = b"WIFIKEY_RESPONSE"
+        self.DISCOVERY_INVITE = b"WIFIKEY_INVITE"
         self.HEARTBEAT_INTERVAL = 5.0  # seconds
         self.CONNECTION_TIMEOUT = 10.0  # seconds
 
         self.lock = threading.Lock()
+        self.discovered_devices = {} # Dict to store unique devices by IP
+
+    def set_screen_dimensions(self, width: int, height: int):
+        """Set the PC screen dimensions for the handshake"""
+        with self.lock:
+            self.screen_width = width
+            self.screen_height = height
+
+    def send_invite(self, target_ip: str, port: int = 12345):
+        """Send an invitation to a specific Android device to connect"""
+        try:
+            # Create invite payload with PC name
+            payload = {
+                'type': 'invite',
+                'pc_name': socket.gethostname(),
+                'pc_ip': socket.gethostbyname(socket.gethostname()),
+                'pc_port': self.server_port
+            }
+            message = self.DISCOVERY_INVITE + json.dumps(payload).encode('utf-8')
+            self.discovery_socket.sendto(message, (target_ip, port))
+            self.log_message.emit(f"Invitation sent to {target_ip}")
+        except Exception as e:
+            self.log_message.emit(f"Error sending invitation: {e}")
 
     def start_server(self, server_port: int = 12346, discovery_port: int = 12345) -> bool:
         """Start the TCP server and UDP discovery"""
@@ -75,6 +105,10 @@ class ConnectionManager(QObject):
                 self.discovery_thread = threading.Thread(target=self.broadcast_discovery, daemon=True)
                 self.discovery_thread.start()
 
+                # Start discovery response listener thread so we always accept discovery replies
+                self.discovery_listener_thread = threading.Thread(target=self.listen_for_discovery_responses, daemon=True)
+                self.discovery_listener_thread.start()
+
                 # Start heartbeat thread
                 self.heartbeat_thread = threading.Thread(target=self.heartbeat_monitor, daemon=True)
                 self.heartbeat_thread.start()
@@ -102,11 +136,25 @@ class ConnectionManager(QObject):
         """Clean up sockets and threads"""
         try:
             if self.server_socket:
-                self.server_socket.close()
+                try:
+                    self.server_socket.shutdown(socket.SHUT_RDWR)
+                except Exception:
+                    pass
+                try:
+                    self.server_socket.close()
+                except Exception:
+                    pass
                 self.server_socket = None
 
             if self.discovery_socket:
-                self.discovery_socket.close()
+                try:
+                    self.discovery_socket.shutdown(socket.SHUT_RDWR)
+                except Exception:
+                    pass
+                try:
+                    self.discovery_socket.close()
+                except Exception:
+                    pass
                 self.discovery_socket = None
         except Exception as e:
             self.log_message.emit(f"Error during cleanup: {e}")
@@ -118,8 +166,9 @@ class ConnectionManager(QObject):
                 client_socket, client_address = self.server_socket.accept()
                 self.log_message.emit(f"Connection attempt from {client_address}")
 
-                # Handle the client connection
-                self.handle_client_connection(client_socket, client_address)
+                # Handle the client connection in a dedicated thread so accept loop stays responsive
+                t = threading.Thread(target=self.handle_client_connection, args=(client_socket, client_address), daemon=True)
+                t.start()
 
             except socket.timeout:
                 continue
@@ -135,7 +184,10 @@ class ConnectionManager(QObject):
             handshake = {
                 'type': 'handshake',
                 'version': '1.0',
-                'timestamp': time.time()
+                'timestamp': time.time(),
+                'device_name': socket.gethostname(),
+                'screen_width': self.screen_width,
+                'screen_height': self.screen_height
             }
             self.send_json(client_socket, handshake)
 
@@ -165,6 +217,9 @@ class ConnectionManager(QObject):
                     daemon=True
                 )
                 client_handler_thread.start()
+                # track the handler thread so we can join it during disconnect
+                with self.lock:
+                    self.client_handler_thread = client_handler_thread
 
             else:
                 client_socket.close()
@@ -190,6 +245,16 @@ class ConnectionManager(QObject):
 
             except socket.timeout:
                 continue
+            except OSError as e:
+                # On Windows, operations on a closed socket can raise WinError 10038.
+                # Treat this as a normal disconnect and avoid noisy error logs.
+                win_err = getattr(e, 'winerror', None)
+                if win_err == 10038 or e.errno in (9,):
+                    # Socket was closed from another thread; exit loop silently
+                    break
+                else:
+                    self.log_message.emit(f"Error receiving client data: {e}")
+                    break
             except Exception as e:
                 self.log_message.emit(f"Error receiving client data: {e}")
                 break
@@ -207,6 +272,7 @@ class ConnectionManager(QObject):
             elif message.get('type') == 'control_return':
                 # Client is returning control to PC
                 self.log_message.emit("Control returned to PC by client")
+                self.control_returned.emit()
 
         except json.JSONDecodeError:
             # Handle binary messages
@@ -218,10 +284,39 @@ class ConnectionManager(QObject):
         """Broadcast discovery messages periodically"""
         while self.server_running:
             try:
-                # Send broadcast message
-                message = self.DISCOVERY_MESSAGE
-                self.discovery_socket.sendto(message, ('<broadcast>', self.discovery_port))
-                self.log_message.emit("Discovery broadcast sent")
+                # Send broadcast message only if not connected
+                if not self.connected:
+                    message = self.DISCOVERY_MESSAGE
+                    
+                    # 1. Send to generic broadcast
+                    try:
+                        self.discovery_socket.sendto(message, ('<broadcast>', self.discovery_port))
+                    except Exception:
+                        pass
+
+                    # 2. Send to all interface broadcast addresses
+                    try:
+                        interfaces = psutil.net_if_addrs()
+                        for interface_name, addrs in interfaces.items():
+                            for addr in addrs:
+                                if addr.family == socket.AF_INET:
+                                    broadcast = addr.broadcast
+                                    # Calculate broadcast if missing (common on Windows)
+                                    if not broadcast and addr.netmask:
+                                        try:
+                                            broadcast = str(ipaddress.IPv4Interface(f"{addr.address}/{addr.netmask}").network.broadcast_address)
+                                        except Exception:
+                                            pass
+                                    
+                                    if broadcast:
+                                        try:
+                                            self.discovery_socket.sendto(message, (broadcast, self.discovery_port))
+                                        except Exception:
+                                            pass
+                    except Exception:
+                        pass
+                        
+                    self.log_message.emit("Discovery broadcast sent")
 
             except Exception as e:
                 self.log_message.emit(f"Error broadcasting discovery: {e}")
@@ -240,20 +335,33 @@ class ConnectionManager(QObject):
                 if data.startswith(self.DISCOVERY_RESPONSE):
                     # Parse device information
                     try:
-                        device_info = json.loads(data[len(self.DISCOVERY_RESPONSE):].decode('utf-8'))
+                        raw = data[len(self.DISCOVERY_RESPONSE):]
+                        device_info = json.loads(raw.decode('utf-8'))
                         device_info['ip'] = addr[0]
-                        self.device_discovered.emit(device_info)
-                        self.log_message.emit(f"Device discovered: {device_info.get('name', 'Unknown')} at {addr[0]}")
-                    except json.JSONDecodeError:
-                        # Simple response without device info
-                        device_info = {
-                            'name': f'Android Device ({addr[0]})',
-                            'ip': addr[0],
-                            'port': self.server_port
-                        }
-                        self.device_discovered.emit(device_info)
-                        self.log_message.emit(f"Device discovered at {addr[0]}")
+                        
+                        # Deduplication logic
+                        device_ip = device_info['ip']
+                        current_time = time.time()
+                        
+                        is_new = device_ip not in self.discovered_devices
+                        if not is_new:
+                            # Check if it's been a while since last update (e.g., 10 seconds)
+                            last_seen = self.discovered_devices[device_ip].get('last_seen', 0)
+                            if current_time - last_seen > 10:
+                                is_new = True
+                        
+                        if is_new:
+                            device_info['last_seen'] = current_time
+                            self.discovered_devices[device_ip] = device_info
+                            self.device_discovered.emit(device_info)
+                            # Only log if it's actually new to the session
+                            if device_ip not in self.discovered_devices or (current_time - self.discovered_devices[device_ip].get('first_seen', 0) < 1):
+                                self.log_message.emit(f"Device discovered: {device_info.get('name', 'Unknown')} at {addr[0]}")
+                            self.discovered_devices[device_ip]['first_seen'] = self.discovered_devices[device_ip].get('first_seen', current_time)
 
+                    except json.JSONDecodeError:
+                         # ... existing error handling ...
+                         pass
             except socket.timeout:
                 continue
             except Exception as e:
@@ -269,14 +377,36 @@ class ConnectionManager(QObject):
 
         self.log_message.emit("Starting device discovery...")
 
-        # Start listening for responses in a separate thread
-        discovery_listener = threading.Thread(target=self.listen_for_discovery_responses, daemon=True)
-        discovery_listener.start()
-
-        # Send immediate broadcast
+        # Send broadcast on all interfaces
         try:
             message = self.DISCOVERY_MESSAGE
-            self.discovery_socket.sendto(message, ('<broadcast>', self.discovery_port))
+            
+            # 1. Send to generic broadcast address (fallback)
+            try:
+                self.discovery_socket.sendto(message, ('<broadcast>', self.discovery_port))
+            except Exception as e:
+                self.log_message.emit(f"Error sending to generic broadcast: {e}")
+
+            # 2. Send to specific broadcast address of each interface
+            interfaces = psutil.net_if_addrs()
+            for interface_name, addrs in interfaces.items():
+                for addr in addrs:
+                    if addr.family == socket.AF_INET:
+                        broadcast = addr.broadcast
+                        # Calculate broadcast if missing (common on Windows)
+                        if not broadcast and addr.netmask:
+                            try:
+                                broadcast = str(ipaddress.IPv4Interface(f"{addr.address}/{addr.netmask}").network.broadcast_address)
+                            except Exception:
+                                pass
+                        
+                        if broadcast:
+                            try:
+                                self.discovery_socket.sendto(message, (broadcast, self.discovery_port))
+                                self.log_message.emit(f"Discovery sent on {interface_name} ({addr.address}) to {broadcast}")
+                            except Exception as e:
+                                pass # Ignore errors on specific interfaces
+                            
         except Exception as e:
             self.log_message.emit(f"Error sending discovery broadcast: {e}")
 
@@ -324,6 +454,11 @@ class ConnectionManager(QObject):
         with self.lock:
             if self.client_socket:
                 try:
+                    try:
+                        # Try a graceful shutdown first
+                        self.client_socket.shutdown(socket.SHUT_RDWR)
+                    except Exception:
+                        pass
                     self.client_socket.close()
                 except:
                     pass
@@ -333,6 +468,14 @@ class ConnectionManager(QObject):
             old_device_name = self.device_name
             self.device_name = ""
             self.client_address = None
+        # Join the client handler thread if present
+        if self.client_handler_thread:
+            try:
+                self.client_handler_thread.join(timeout=1.0)
+            except Exception:
+                pass
+            finally:
+                self.client_handler_thread = None
 
         if old_device_name:
             self.log_message.emit(f"Disconnected from {old_device_name}")

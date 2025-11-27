@@ -29,6 +29,7 @@ class ConnectionService : Service() {
         private const val DISCOVERY_PORT = 12345
         private const val DISCOVERY_MESSAGE = "WIFIKEY_DISCOVERY"
         private const val DISCOVERY_RESPONSE = "WIFIKEY_RESPONSE"
+        private const val DISCOVERY_INVITE = "WIFIKEY_INVITE"
 
         // Connection settings
         private const val CONNECTION_TIMEOUT = 10000 // 10 seconds
@@ -41,10 +42,12 @@ class ConnectionService : Service() {
         const val ACTION_STOP_SERVICE = "com.wifikeycontrol.STOP_SERVICE"
         const val ACTION_CONNECT = "com.wifikeycontrol.CONNECT"
         const val ACTION_DISCONNECT = "com.wifikeycontrol.DISCONNECT"
+        const val ACTION_INVITATION_RECEIVED = "com.wifikeycontrol.INVITATION_RECEIVED"
 
         // Intent extras
         const val EXTRA_SERVER_IP = "server_ip"
         const val EXTRA_SERVER_PORT = "server_port"
+        const val EXTRA_PC_NAME = "pc_name"
 
         // Broadcast actions
         const val ACTION_CONNECTION_STATUS_CHANGED = "com.wifikeycontrol.CONNECTION_STATUS_CHANGED"
@@ -74,6 +77,7 @@ class ConnectionService : Service() {
     private var serverIp: String = "192.168.1.100"
     private var serverPort: Int = DEFAULT_SERVER_PORT
     private var deviceName: String = ""
+    private var connectedDeviceName: String = ""
     private var reconnectAttempts = 0
 
     // Protocol handler
@@ -210,7 +214,7 @@ class ConnectionService : Service() {
 
                     Log.d(TAG, "Connected to server successfully")
                     updateNotification("Connected to PC", true)
-                    broadcastConnectionStatus(true, "")
+                    broadcastConnectionStatus(true, connectedDeviceName) // Using connectedDeviceName here
 
                     // Start heartbeat
                     startHeartbeat()
@@ -266,7 +270,7 @@ class ConnectionService : Service() {
 
         // Update UI
         updateNotification("Disconnected", false)
-        broadcastConnectionStatus(false, "")
+        broadcastConnectionStatus(false, "") // This should use connectedDeviceName if it was ever set
 
         Log.d(TAG, "Disconnected from server")
     }
@@ -284,6 +288,24 @@ class ConnectionService : Service() {
             if (handshake.getString("type") != "handshake") {
                 Log.e(TAG, "Invalid handshake type")
                 return false
+            }
+            
+            // Get PC name from handshake
+            if (handshake.has("device_name")) {
+                connectedDeviceName = handshake.getString("device_name")
+            } else {
+                connectedDeviceName = "Unknown PC"
+            }
+            
+            // Get Screen Dimensions
+            val screenWidth = if (handshake.has("screen_width")) handshake.getInt("screen_width") else 1920
+            val screenHeight = if (handshake.has("screen_height")) handshake.getInt("screen_height") else 1080
+            
+            // Save to prefs for InputSimulator
+            getSharedPreferences("wifikeycontrol_prefs", Context.MODE_PRIVATE).edit().apply {
+                putInt("pc_screen_width", screenWidth)
+                putInt("pc_screen_height", screenHeight)
+                apply()
             }
 
             // Send handshake response
@@ -333,24 +355,194 @@ class ConnectionService : Service() {
     private fun startMessageListener() {
         serviceScope.launch {
             try {
+                val inputStream = socket?.getInputStream()
+                if (inputStream == null) {
+                    Log.e(TAG, "Input stream is null")
+                    return@launch
+                }
+
+                val recvBuf = ByteArray(4096)
+                val bufferStream = java.io.ByteArrayOutputStream()
+
                 while (isConnected.get() && isRunning.get()) {
-                    val message = inputReader?.readLine()
-                    if (message == null) {
-                        Log.d(TAG, "Server disconnected")
+                    val read = try {
+                        inputStream.read(recvBuf)
+                    } catch (e: Exception) {
+                        Log.e(TAG, "Socket read error: ${e.message}")
+                        -1
+                    }
+
+                    if (read <= 0) {
+                        Log.d(TAG, "Server disconnected or read 0 bytes")
                         break
                     }
 
-                    // Process message
-                    processMessage(message)
+                    bufferStream.write(recvBuf, 0, read)
+                    var buffer = bufferStream.toByteArray()
+
+                    // Process as many complete messages/packets as possible
+                    var offset = 0
+                    while (offset < buffer.size) {
+                        // Need at least header(2) + type(1) + checksum(2) to attempt parse
+                        if (buffer.size - offset < 5) break
+
+                        // Check for header magic (little-endian 0xAABB -> bytes 0xBB,0xAA)
+                        val b0 = buffer[offset].toInt() and 0xFF
+                        val b1 = buffer[offset + 1].toInt() and 0xFF
+                        val header = (b1 shl 8) or b0
+
+                        if (header == 0xAABB) {
+                            val typeByte = buffer[offset + 2].toInt() and 0xFF
+                            val compressed = (typeByte and 0x80) != 0
+                            val packetType = typeByte and 0x7F
+
+                            // Determine expected full packet length
+                            val fullLen = when (packetType) {
+                                0x01 -> 3 + 18 + 2 // mouse movement
+                                0x02 -> 3 + 20 + 2 // mouse click
+                                0x03 -> 3 + 32 + 2 // keyboard
+                                0x04 -> 3 + 22 + 2 // scroll
+                                0x07 -> 3 + 14 + 2 // control switch
+                                0x08 -> 3 + 10 + 2 // heartbeat
+                                0xFE, 0xFF -> {
+                                    // Need at least 4 bytes of payload to read json_len (seq(2)+len(2))
+                                    if (buffer.size - offset < 3 + 4) break
+                                    val lenLo = buffer[offset + 5].toInt() and 0xFF
+                                    val lenHi = buffer[offset + 6].toInt() and 0xFF
+                                    val jsonLen = (lenHi shl 8) or lenLo
+                                    3 + 4 + jsonLen + 2
+                                }
+                                else -> {
+                                    // Unknown type: try to find next header to resync
+                                    -1
+                                }
+                            }
+
+                            if (fullLen == -1) {
+                                // Can't determine size; attempt to resync by searching for next header
+                                val nextHeader = indexOfHeader(buffer, offset + 1)
+                                if (nextHeader >= 0) {
+                                    offset = nextHeader
+                                    continue
+                                } else {
+                                    // Wait for more data
+                                    break
+                                }
+                            }
+
+                            if (buffer.size - offset < fullLen) break // wait for more data
+
+                            val packetBytes = buffer.copyOfRange(offset, offset + fullLen)
+                            val eventData = protocolHandler.parsePacket(packetBytes)
+                            if (eventData != null) {
+                                // Dispatch event to input simulator
+                                processInputEventFromPacket(eventData)
+                            } else {
+                                Log.w(TAG, "Failed to parse packet or checksum mismatch")
+                            }
+
+                            offset += fullLen
+                        } else {
+                            // Not a binary packet at current offset — try to find newline (JSON) or next header
+                            val newlineIndex = indexOfByte(buffer, '\n'.code.toByte(), offset)
+                            if (newlineIndex >= 0) {
+                                val lineBytes = buffer.copyOfRange(offset, newlineIndex)
+                                val line = try {
+                                    String(lineBytes)
+                                } catch (e: Exception) {
+                                    null
+                                }
+
+                                if (line != null && line.trim().isNotEmpty()) {
+                                    try {
+                                        processMessage(line)
+                                    } catch (e: Exception) {
+                                        Log.w(TAG, "Error processing JSON message: ${e.message}")
+                                    }
+                                }
+
+                                offset = newlineIndex + 1
+                            } else {
+                                // No newline and no header at current position; attempt to find next header
+                                val nextHeader = indexOfHeader(buffer, offset + 1)
+                                if (nextHeader >= 0) {
+                                    offset = nextHeader
+                                    continue
+                                } else {
+                                    // Need more data
+                                    break
+                                }
+                            }
+                        }
+                    }
+
+                    // Remove processed bytes from bufferStream
+                    if (offset >= buffer.size) {
+                        bufferStream.reset()
+                    } else if (offset > 0) {
+                        val remaining = buffer.copyOfRange(offset, buffer.size)
+                        bufferStream.reset()
+                        bufferStream.write(remaining)
+                    }
                 }
             } catch (e: Exception) {
                 Log.e(TAG, "Message listener error: ${e.message}")
             } finally {
-                // Connection lost
                 if (isConnected.get()) {
                     disconnectFromServer()
                 }
             }
+        }
+    }
+
+    /**
+     * Find little-endian header 0xAABB (bytes 0xBB,0xAA) in buffer starting at fromIndex
+     */
+    private fun indexOfHeader(buffer: ByteArray, fromIndex: Int): Int {
+        var i = fromIndex
+        while (i + 1 < buffer.size) {
+            if ((buffer[i].toInt() and 0xFF) == 0xBB && (buffer[i + 1].toInt() and 0xFF) == 0xAA) return i
+            i++
+        }
+        return -1
+    }
+
+    /**
+     * Find a single byte value in the buffer starting at fromIndex
+     */
+    private fun indexOfByte(buffer: ByteArray, value: Byte, fromIndex: Int): Int {
+        var i = fromIndex
+        while (i < buffer.size) {
+            if (buffer[i] == value) return i
+            i++
+        }
+        return -1
+    }
+
+    /**
+     * Helper to route parsed packet event data into existing processing path
+     */
+    private fun processInputEventFromPacket(eventData: Map<String, Any>) {
+        try {
+            // Convert parsed event map into Broadcast for InputSimulatorService
+            val intent = Intent(InputSimulatorService.ACTION_PROCESS_INPUT_EVENT).apply {
+                setPackage(packageName)
+                putExtra(InputSimulatorService.EXTRA_EVENT_DATA, Bundle().apply {
+                    eventData.forEach { (key, value) ->
+                        when (value) {
+                            is String -> putString(key, value)
+                            is Int -> putInt(key, value)
+                            is Boolean -> putBoolean(key, value)
+                            is Long -> putLong(key, value)
+                            is Float -> putFloat(key, value)
+                            else -> putString(key, value.toString())
+                        }
+                    }
+                })
+            }
+            sendBroadcast(intent)
+        } catch (e: Exception) {
+            Log.e(TAG, "Error dispatching parsed packet: ${e.message}")
         }
     }
 
@@ -395,6 +587,7 @@ class ConnectionService : Service() {
     private fun processInputEvent(eventData: Map<String, Any>) {
         // Send event to input simulator service
         val intent = Intent(InputSimulatorService.ACTION_PROCESS_INPUT_EVENT).apply {
+            setPackage(packageName)
             putExtra(InputSimulatorService.EXTRA_EVENT_DATA, Bundle().apply {
                 eventData.forEach { (key, value) ->
                     when (value) {
@@ -428,6 +621,8 @@ class ConnectionService : Service() {
                         val message = String(packet.data, 0, packet.length)
                         if (message.startsWith(DISCOVERY_MESSAGE)) {
                             handleDiscoveryPacket(packet)
+                        } else if (message.startsWith(DISCOVERY_INVITE)) {
+                            handleInvitationPacket(packet, message)
                         }
                     } catch (e: SocketTimeoutException) {
                         // Continue listening
@@ -467,6 +662,46 @@ class ConnectionService : Service() {
         }
     }
 
+    private fun handleInvitationPacket(packet: DatagramPacket, message: String) {
+        try {
+            val rawJson = message.substring(DISCOVERY_INVITE.length)
+            val invite = JSONObject(rawJson)
+            
+            val pcName = invite.getString("pc_name")
+            // Use the IP address from the packet header, as it's the one that is actually reachable
+            val pcIp = packet.address.hostAddress
+            val pcPort = invite.getInt("pc_port")
+
+            Log.d(TAG, "Received invitation from $pcName at $pcIp")
+
+            // Check if trusted
+            val prefs = getSharedPreferences("wifikeycontrol_prefs", Context.MODE_PRIVATE)
+            val trustedDevices = prefs.getStringSet("trusted_devices", emptySet()) ?: emptySet()
+            
+            // We use IP as the key for now, but ideally we should use a unique ID if available
+            // Or we can trust the Name + IP combination
+            val deviceKey = "$pcName@$pcIp"
+            
+            if (trustedDevices.contains(deviceKey)) {
+                Log.d(TAG, "Device is trusted, connecting automatically...")
+                connectToServer(pcIp, pcPort)
+            } else {
+                Log.d(TAG, "Device not trusted, requesting user permission...")
+                val intent = Intent(ACTION_INVITATION_RECEIVED).apply {
+                    setPackage(packageName)
+                    putExtra(EXTRA_PC_NAME, pcName)
+                    putExtra(EXTRA_SERVER_IP, pcIp)
+                    putExtra(EXTRA_SERVER_PORT, pcPort)
+                    addFlags(Intent.FLAG_INCLUDE_STOPPED_PACKAGES)
+                }
+                sendBroadcast(intent)
+            }
+
+        } catch (e: Exception) {
+            Log.e(TAG, "Error handling invitation packet: ${e.message}")
+        }
+    }
+
     private fun createNotificationChannel() {
         if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.O) {
             val channel = NotificationChannel(
@@ -499,10 +734,23 @@ class ConnectionService : Service() {
 
     private fun broadcastConnectionStatus(connected: Boolean, errorMessage: String) {
         val intent = Intent(ACTION_CONNECTION_STATUS_CHANGED).apply {
+            setPackage(packageName)
             putExtra(EXTRA_IS_CONNECTED, connected)
-            putExtra(EXTRA_DEVICE_NAME, if (connected) deviceName else "")
+            putExtra(EXTRA_DEVICE_NAME, if (connected) connectedDeviceName else "")
             putExtra(EXTRA_ERROR_MESSAGE, errorMessage)
         }
+        // Persist connection state so UI can read it if it missed the broadcast
+        try {
+            val prefs = getSharedPreferences("wifikeycontrol_prefs", Context.MODE_PRIVATE)
+            prefs.edit().apply {
+                putBoolean("is_connected", connected)
+                putString("device_name", if (connected) connectedDeviceName else "")
+                apply()
+            }
+        } catch (e: Exception) {
+            Log.w(TAG, "Failed to persist connection state: ${e.message}")
+        }
+
         sendBroadcast(intent)
     }
 }
