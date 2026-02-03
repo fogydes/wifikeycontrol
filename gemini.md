@@ -121,10 +121,11 @@ wifikeycontrol/
 
 ## 📝 Context Handoff Log
 
-| Date       | Change                             | Next Step                  |
-| ---------- | ---------------------------------- | -------------------------- |
-| 2026-02-03 | Initialized project map            | Await discovery answers    |
-| 2026-02-03 | Discovery complete, defined schema | Create implementation plan |
+| Date       | Change                                  | Next Step                        |
+| ---------- | --------------------------------------- | -------------------------------- |
+| 2026-02-03 | Initialized project map                 | Await discovery answers          |
+| 2026-02-03 | Discovery complete, defined schema      | Create implementation plan       |
+| 2026-02-03 | **PC app refactor complete (Go+Wails)** | Refactor Android for FlatBuffers |
 
 ---
 
