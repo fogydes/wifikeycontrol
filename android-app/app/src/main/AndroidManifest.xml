@@ -59,6 +59,14 @@
             android:exported="false"
             android:foregroundServiceType="dataSync" />
 
+        <!-- Connection Service V2 - FlatBuffers-based (new) -->
+        <service
+            android:name=".services.ConnectionServiceV2"
+            android:enabled="true"
+            android:exported="false"
+            android:foregroundServiceType="dataSync" />
+
+
         <!-- Input Simulator Service - Accessibility service for touch simulation -->
         <service
             android:name=".services.InputSimulatorService"

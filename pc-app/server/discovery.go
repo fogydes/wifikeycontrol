@@ -136,14 +136,11 @@ func (d *Discovery) broadcastLoop() {
 	// Send initial broadcast
 	d.sendBroadcast()
 
-	for {
-		select {
-		case <-ticker.C:
-			if !d.running {
-				return
-			}
-			d.sendBroadcast()
+	for range ticker.C {
+		if !d.running {
+			return
 		}
+		d.sendBroadcast()
 	}
 }
 
