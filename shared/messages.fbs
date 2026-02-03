@@ -1,0 +1,86 @@
+// WiFiKeyControl Protocol Schema
+// Single source of truth for PC←→Android communication
+
+namespace wifikeycontrol;
+
+// ============================================
+// ENUMS
+// ============================================
+
+enum EventType : byte {
+    None = 0,
+    MouseMoveRel,
+    MouseClick,
+    MouseScroll,
+    KeyPress,
+    KeyRelease,
+    ControlSwitch,
+    Heartbeat,
+    HeartbeatAck
+}
+
+enum MouseButton : byte { 
+    None = 0,
+    Left, 
+    Right, 
+    Middle, 
+    X1, 
+    X2 
+}
+
+enum Edge : byte { 
+    None = 0,
+    Left, 
+    Right, 
+    Top, 
+    Bottom, 
+    Hotkey, 
+    ReturnToPC 
+}
+
+// ============================================
+// EVENT PAYLOADS
+// ============================================
+
+table MouseMoveEvent {
+    dx: short;
+    dy: short;
+}
+
+table MouseClickEvent {
+    button: MouseButton;
+    pressed: bool;
+}
+
+table MouseScrollEvent {
+    dx: short;
+    dy: short;
+}
+
+table KeyEvent {
+    keycode: int;
+    key: string;
+    modifiers: ubyte;  // Bitmask: 1=Shift, 2=Ctrl, 4=Alt, 8=Meta
+}
+
+table ControlSwitchEvent {
+    edge: Edge;
+}
+
+// ============================================
+// MAIN MESSAGE
+// ============================================
+
+table InputEvent {
+    type: EventType;
+    timestamp: ulong;  // Unix timestamp in milliseconds
+    
+    // Only one of these will be populated based on type
+    mouse_move: MouseMoveEvent;
+    mouse_click: MouseClickEvent;
+    mouse_scroll: MouseScrollEvent;
+    key: KeyEvent;
+    control_switch: ControlSwitchEvent;
+}
+
+root_type InputEvent;
