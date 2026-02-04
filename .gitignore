@@ -1,78 +1,48 @@
-# Local configuration
-local.properties
-
-# Gradle
-.gradle/
-**/build/
-!gradle/wrapper/gradle-wrapper.jar
-!gradle/wrapper/gradle-wrapper.properties
-.gradle/7.*/executionHistory/*
-.gradle/8.*/executionHistory/*
-.gradle/7.*/fileHashes/*
-.gradle/8.*/fileHashes/*
-.cxx/
-.externalNativeBuild/
-
-# Android/Studio
-.idea/
-*.iml
-captures/
-.navigation/
-.cache/
-*.ipr
-*.iws
-
-# Outputs
-**/outputs/
-**/intermediates/
-**/generated/
-**/reports/
-**/tmp/
-*.apk
-*.ap_
-*.aab
-*.aar
-*.hprof
-
-# Keystores / signing
-*.jks
-*.keystore
-*.pem
-*.p12
-*.key
-*.pub
-yes
-
-# OS/editor junk
+# Generic / OS
 .DS_Store
 Thumbs.db
 *.swp
 *.swo
 .vscode/
-
-# Logs
 *.log
 
-# NDK/LLDB
-obj/
+# Android / Gradle
+.gradle/
+**/build/
+!gradle/wrapper/gradle-wrapper.jar
+!gradle/wrapper/gradle-wrapper.properties
+.cxx/
+.externalNativeBuild/
 local.properties
+captures/
+.navigation/
+.cache/
+*.apk
+*.ap_
+*.aab
+*.aar
+*.jks
+*.keystore
 
-# Kotlin
-.kotlin/
-
-# Python
-__pycache__/
-*.pyc
-*.pyo
-*.pyd
-.Python
-env/
-venv/
-venv_test/
-.pytest_cache/
-get-pip.py
-pip-wheel-metadata/
-.env
-
-# JetBrains
+# JetBrains / IntelliJ / Android Studio
 .idea/
+*.iml
+*.ipr
+*.iws
+
+# Node.js / Frontend
+node_modules/
+**/dist/
+.package-lock.json
+
+# Go / Wails
+*.exe
+*.test
+*.prof
+pc-app/build/bin/
+pc-app/frontend/wailsjs/
+wails-frontend-dev.log
+.wails/
+
+# Project Specific
+pc-app/pc-app.exe
