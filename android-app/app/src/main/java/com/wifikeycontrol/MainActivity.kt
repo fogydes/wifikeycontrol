@@ -12,7 +12,7 @@ import androidx.appcompat.app.AlertDialog
 import androidx.appcompat.app.AppCompatActivity
 import androidx.core.content.ContextCompat
 import androidx.core.text.HtmlCompat
-import com.wifikeycontrol.services.ConnectionService
+import com.wifikeycontrol.services.ConnectionServiceV2
 import com.wifikeycontrol.services.InputSimulatorService
 import com.wifikeycontrol.services.KeyboardService
 
@@ -46,10 +46,10 @@ class MainActivity : AppCompatActivity() {
     // BroadcastReceiver for connection status updates
     private val connectionStatusReceiver = object : BroadcastReceiver() {
         override fun onReceive(context: Context?, intent: Intent?) {
-            if (intent?.action == ConnectionService.ACTION_CONNECTION_STATUS_CHANGED) {
-                val connected = intent.getBooleanExtra(ConnectionService.EXTRA_IS_CONNECTED, false)
-                val deviceName = intent.getStringExtra(ConnectionService.EXTRA_DEVICE_NAME) ?: ""
-                val errorMessage = intent.getStringExtra(ConnectionService.EXTRA_ERROR_MESSAGE) ?: ""
+            if (intent?.action == ConnectionServiceV2.ACTION_CONNECTION_STATUS_CHANGED) {
+                val connected = intent.getBooleanExtra(ConnectionServiceV2.EXTRA_IS_CONNECTED, false)
+                val deviceName = intent.getStringExtra(ConnectionServiceV2.EXTRA_DEVICE_NAME) ?: ""
+                val errorMessage = intent.getStringExtra(ConnectionServiceV2.EXTRA_ERROR_MESSAGE) ?: ""
 
                 updateConnectionStatus(connected, deviceName, errorMessage)
             }
@@ -59,10 +59,10 @@ class MainActivity : AppCompatActivity() {
     // BroadcastReceiver for invitations
     private val invitationReceiver = object : BroadcastReceiver() {
         override fun onReceive(context: Context?, intent: Intent?) {
-            if (intent?.action == ConnectionService.ACTION_INVITATION_RECEIVED) {
-                val pcName = intent.getStringExtra(ConnectionService.EXTRA_PC_NAME) ?: "Unknown PC"
-                val ip = intent.getStringExtra(ConnectionService.EXTRA_SERVER_IP) ?: ""
-                val port = intent.getIntExtra(ConnectionService.EXTRA_SERVER_PORT, 12346)
+            if (intent?.action == ConnectionServiceV2.ACTION_INVITATION_RECEIVED) {
+                val pcName = intent.getStringExtra(ConnectionServiceV2.EXTRA_PC_NAME) ?: "Unknown PC"
+                val ip = intent.getStringExtra(ConnectionServiceV2.EXTRA_SERVER_IP) ?: ""
+                val port = intent.getIntExtra(ConnectionServiceV2.EXTRA_SERVER_PORT, 12346)
                 
                 showInvitationDialog(pcName, ip, port)
             }
@@ -85,7 +85,7 @@ class MainActivity : AppCompatActivity() {
         ContextCompat.registerReceiver(
             this,
             connectionStatusReceiver,
-            IntentFilter(ConnectionService.ACTION_CONNECTION_STATUS_CHANGED),
+            IntentFilter(ConnectionServiceV2.ACTION_CONNECTION_STATUS_CHANGED),
             ContextCompat.RECEIVER_NOT_EXPORTED
         )
 
@@ -93,7 +93,7 @@ class MainActivity : AppCompatActivity() {
         ContextCompat.registerReceiver(
             this,
             invitationReceiver,
-            IntentFilter(ConnectionService.ACTION_INVITATION_RECEIVED),
+            IntentFilter(ConnectionServiceV2.ACTION_INVITATION_RECEIVED),
             ContextCompat.RECEIVER_NOT_EXPORTED
         )
 
@@ -198,12 +198,12 @@ class MainActivity : AppCompatActivity() {
 
         // Start service button
         startServiceButton.setOnClickListener {
-            startConnectionService()
+            startConnectionServiceV2()
         }
 
         // Stop service button
         stopServiceButton.setOnClickListener {
-            stopConnectionService()
+            stopConnectionServiceV2()
         }
 
         // Settings button
@@ -218,14 +218,14 @@ class MainActivity : AppCompatActivity() {
 
         // Start connection service if not already started
         if (!isServiceStarted) {
-            startConnectionService()
+            startConnectionServiceV2()
         }
 
         // Send connect command to service
-        val intent = Intent(this, ConnectionService::class.java).apply {
-            action = ConnectionService.ACTION_CONNECT
-            putExtra(ConnectionService.EXTRA_SERVER_IP, ip)
-            putExtra(ConnectionService.EXTRA_SERVER_PORT, port)
+        val intent = Intent(this, ConnectionServiceV2::class.java).apply {
+            action = ConnectionServiceV2.ACTION_CONNECT
+            putExtra(ConnectionServiceV2.EXTRA_SERVER_IP, ip)
+            putExtra(ConnectionServiceV2.EXTRA_SERVER_PORT, port)
         }
         startService(intent)
     }
@@ -234,18 +234,18 @@ class MainActivity : AppCompatActivity() {
         Log.d(TAG, "Disconnecting from server")
         addLog("Disconnecting...")
 
-        val intent = Intent(this, ConnectionService::class.java).apply {
-            action = ConnectionService.ACTION_DISCONNECT
+        val intent = Intent(this, ConnectionServiceV2::class.java).apply {
+            action = ConnectionServiceV2.ACTION_DISCONNECT
         }
         startService(intent)
     }
 
-    private fun startConnectionService() {
+    private fun startConnectionServiceV2() {
         Log.d(TAG, "Starting connection service")
         addLog("Starting service...")
 
-        val intent = Intent(this, ConnectionService::class.java).apply {
-            action = ConnectionService.ACTION_START_SERVICE
+        val intent = Intent(this, ConnectionServiceV2::class.java).apply {
+            action = ConnectionServiceV2.ACTION_START_SERVICE
         }
         startService(intent)
 
@@ -253,12 +253,12 @@ class MainActivity : AppCompatActivity() {
         updateUIState()
     }
 
-    private fun stopConnectionService() {
+    private fun stopConnectionServiceV2() {
         Log.d(TAG, "Stopping connection service")
         addLog("Stopping service...")
 
-        val intent = Intent(this, ConnectionService::class.java).apply {
-            action = ConnectionService.ACTION_STOP_SERVICE
+        val intent = Intent(this, ConnectionServiceV2::class.java).apply {
+            action = ConnectionServiceV2.ACTION_STOP_SERVICE
         }
         startService(intent)
 

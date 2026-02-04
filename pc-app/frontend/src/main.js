@@ -8,6 +8,7 @@ let connected = false;
 let deviceName = "";
 let controlling = false;
 let logs = [];
+let localIP = "Loading...";
 
 // Render the app
 function render() {
@@ -24,6 +25,7 @@ function render() {
                     <span class="status-indicator ${serverRunning ? "active" : ""}"></span>
                     ${serverRunning ? "Running on port 12346" : "Stopped"}
                 </div>
+                <div class="ip-display" style="margin-top:8px;font-size:12px;opacity:0.7">PC IP: ${localIP}</div>
             </div>
             <div class="status-card">
                 <h3>Device</h3>
@@ -40,6 +42,7 @@ function render() {
                 ? `<button class="btn btn-primary" id="startBtn">▶ Start Server</button>`
                 : `<button class="btn btn-danger" id="stopBtn">■ Stop Server</button>`
             }
+            ${serverRunning ? `<button class="btn btn-secondary" id="usbModeBtn">🔌 USB Mode</button>` : ""}
             ${
               connected && controlling
                 ? `<button class="btn btn-secondary" id="returnBtn">↩ Return to PC</button>`
@@ -87,6 +90,7 @@ function attachEventHandlers() {
   const stopBtn = document.getElementById("stopBtn");
   const returnBtn = document.getElementById("returnBtn");
   const clearLogsBtn = document.getElementById("clearLogsBtn");
+  const usbModeBtn = document.getElementById("usbModeBtn");
 
   if (startBtn) {
     startBtn.addEventListener("click", async () => {
@@ -131,6 +135,18 @@ function attachEventHandlers() {
       logs = [];
       await App.ClearLogs();
       render();
+    });
+  }
+
+  if (usbModeBtn) {
+    usbModeBtn.addEventListener("click", async () => {
+      try {
+        await App.EnableUSBMode();
+        addLog("USB Mode enabled - Use 127.0.0.1 on Android");
+        render();
+      } catch (err) {
+        addLog("USB Mode failed: " + err);
+      }
     });
   }
 }
@@ -201,6 +217,7 @@ render();
   try {
     serverRunning = await App.IsServerRunning();
     connected = await App.IsConnected();
+    localIP = await App.GetLocalIP();
     if (connected) {
       deviceName = await App.GetConnectedDevice();
       controlling = await App.IsControllingAndroid();

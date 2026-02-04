@@ -3,6 +3,8 @@ package main
 import (
 	"context"
 	"fmt"
+	"net"
+	"os/exec"
 	"sync"
 
 	"pc-app/input"
@@ -41,7 +43,7 @@ func (a *App) startup(ctx context.Context) {
 	a.ctx = ctx
 
 	// Set up callbacks
-	a.server.SetCallbacks(a.onConnect, a.onDisconnect, a.addLog)
+	a.server.SetCallbacks(a.onConnect, a.onDisconnect, a.addLog, a.onControlReturn)
 	a.discovery.SetCallbacks(a.onDeviceDiscovered, a.addLog)
 	a.capture.SetCallbacks(a.onInputEvent, a.addLog)
 }
@@ -88,6 +90,57 @@ func (a *App) IsConnected() bool {
 // GetConnectedDevice returns the connected device name
 func (a *App) GetConnectedDevice() string {
 	return a.server.GetClientName()
+}
+
+// GetLocalIP returns the PC's local private network IP address
+func (a *App) GetLocalIP() string {
+	addrs, err := net.InterfaceAddrs()
+	if err != nil {
+		return "Unknown"
+	}
+
+	var fallback string
+	for _, addr := range addrs {
+		if ipnet, ok := addr.(*net.IPNet); ok && !ipnet.IP.IsLoopback() {
+			ip4 := ipnet.IP.To4()
+			if ip4 == nil {
+				continue // Skip IPv6
+			}
+			// 10.x.x.x
+			if ip4[0] == 10 {
+				return ip4.String()
+			}
+			// 172.x.x.x
+			if ip4[0] == 172 && ip4[1] >= 16 && ip4[1] <= 31 {
+				if fallback == "" {
+					fallback = ip4.String()
+				}
+			}
+			// 192.168.x.x
+			if ip4[0] == 192 && ip4[1] == 168 {
+				if fallback == "" {
+					fallback = ip4.String()
+				}
+			}
+		}
+	}
+	if fallback != "" {
+		return fallback
+	}
+	return "No LAN found"
+}
+
+// EnableUSBMode runs adb reverse to forward port 12346 for USB connections
+func (a *App) EnableUSBMode() error {
+	cmd := exec.Command("adb", "reverse", "tcp:12346", "tcp:12346")
+	output, err := cmd.CombinedOutput()
+	if err != nil {
+		a.addLog(fmt.Sprintf("ADB reverse failed: %v - %s", err, string(output)))
+		return fmt.Errorf("ADB reverse failed: %w", err)
+	}
+	a.addLog("USB Mode enabled - Android can connect to 127.0.0.1:12346")
+	runtime.EventsEmit(a.ctx, "usb:enabled")
+	return nil
 }
 
 // ============================================
@@ -166,6 +219,12 @@ func (a *App) onConnect(deviceName string) {
 func (a *App) onDisconnect() {
 	a.capture.Stop()
 	runtime.EventsEmit(a.ctx, "device:disconnected")
+}
+
+func (a *App) onControlReturn() {
+	a.addLog("Control returned from Android")
+	a.capture.SwitchToPCMode()
+	runtime.EventsEmit(a.ctx, "control:returned")
 }
 
 func (a *App) onDeviceDiscovered(ip, name string) {

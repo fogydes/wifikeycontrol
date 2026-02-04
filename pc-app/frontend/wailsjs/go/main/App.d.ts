@@ -3,7 +3,11 @@
 
 export function ClearLogs():Promise<void>;
 
+export function EnableUSBMode():Promise<void>;
+
 export function GetConnectedDevice():Promise<string>;
+
+export function GetLocalIP():Promise<string>;
 
 export function GetLogs():Promise<Array<string>>;
 

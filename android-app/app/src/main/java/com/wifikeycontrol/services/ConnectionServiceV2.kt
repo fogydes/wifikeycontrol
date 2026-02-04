@@ -1,8 +1,10 @@
 package com.wifikeycontrol.services
 
 import android.app.*
+import android.content.BroadcastReceiver
 import android.content.Context
 import android.content.Intent
+import android.content.IntentFilter
 import android.os.*
 import android.util.Log
 import androidx.core.app.NotificationCompat
@@ -31,7 +33,7 @@ class ConnectionServiceV2 : Service() {
         private const val DEFAULT_SERVER_PORT = 12346
         private const val DISCOVERY_PORT = 12345
         private const val DISCOVERY_MESSAGE = "WIFIKEYCONTROL_DISCOVER"
-        
+
         // Connection settings
         private const val CONNECTION_TIMEOUT = 10000
         private const val HEARTBEAT_INTERVAL = 5000L
@@ -48,9 +50,14 @@ class ConnectionServiceV2 : Service() {
 
         // Broadcast actions
         const val ACTION_CONNECTION_STATUS_CHANGED = "com.wifikeycontrol.CONNECTION_STATUS_CHANGED"
+        const val ACTION_INVITATION_RECEIVED = "com.wifikeycontrol.INVITATION_RECEIVED"
         const val EXTRA_IS_CONNECTED = "is_connected"
         const val EXTRA_DEVICE_NAME = "device_name"
         const val EXTRA_ERROR_MESSAGE = "error_message"
+        const val EXTRA_PC_NAME = "pc_name"
+        
+        // Broadcast from InputSimulatorService to request control return
+        const val ACTION_SEND_CONTROL_RETURN = "com.wifikeycontrol.SEND_CONTROL_RETURN"
     }
 
     // State
@@ -80,6 +87,16 @@ class ConnectionServiceV2 : Service() {
 
     // System services
     private lateinit var notificationManager: NotificationManager
+    
+    // Broadcast receiver for control return requests from InputSimulatorService
+    private val controlReturnReceiver = object : BroadcastReceiver() {
+        override fun onReceive(context: Context?, intent: Intent?) {
+            if (intent?.action == ACTION_SEND_CONTROL_RETURN) {
+                Log.e(TAG, ">>> Received CONTROL_RETURN request - sending to PC")
+                sendControlReturn()
+            }
+        }
+    }
 
     override fun onCreate() {
         super.onCreate()
@@ -87,6 +104,14 @@ class ConnectionServiceV2 : Service() {
         
         notificationManager = getSystemService(Context.NOTIFICATION_SERVICE) as NotificationManager
         deviceName = "${Build.MANUFACTURER} ${Build.MODEL}"
+        
+        // Register for control return broadcasts
+        val filter = IntentFilter(ACTION_SEND_CONTROL_RETURN)
+        if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.TIRAMISU) {
+            registerReceiver(controlReturnReceiver, filter, Context.RECEIVER_EXPORTED)
+        } else {
+            registerReceiver(controlReturnReceiver, filter)
+        }
         
         createNotificationChannel()
         startForeground(NOTIFICATION_ID, createNotification("Ready", false))
@@ -113,6 +138,11 @@ class ConnectionServiceV2 : Service() {
 
     override fun onDestroy() {
         super.onDestroy()
+        try {
+            unregisterReceiver(controlReturnReceiver)
+        } catch (e: Exception) {
+            Log.w(TAG, "Error unregistering controlReturnReceiver: ${e.message}")
+        }
         stopServiceInternal()
         serviceScope.cancel()
     }
@@ -257,6 +287,7 @@ class ConnectionServiceV2 : Service() {
                         break
                     }
 
+                    Log.e(TAG, ">>> Received $bytesRead bytes from server")
                     buffer.write(readBuffer, 0, bytesRead)
                     
                     // Process complete messages
@@ -265,10 +296,14 @@ class ConnectionServiceV2 : Service() {
                     
                     while (true) {
                         val result = protocolHandler.tryReadMessage(data, offset)
-                        if (result == null) break
+                        if (result == null) {
+                            Log.e(TAG, ">>> tryReadMessage returned null (incomplete message)")
+                            break
+                        }
                         
                         val (event, consumed) = result
                         offset += consumed
+                        Log.e(TAG, ">>> Parsed event: $event, consumed $consumed bytes")
                         
                         if (event != null) {
                             processEvent(event)
@@ -293,11 +328,12 @@ class ConnectionServiceV2 : Service() {
      * Process a parsed FlatBuffer event.
      */
     private fun processEvent(event: ParsedEvent) {
+        Log.e(TAG, ">>> processEvent called with: $event")
         val bundle = Bundle()
         
         when (event) {
             is ParsedEvent.MouseMove -> {
-                bundle.putString("type", "mouse_move")
+                bundle.putString("type", "mouse_move_relative")
                 bundle.putInt("dx", event.dx.toInt())
                 bundle.putInt("dy", event.dy.toInt())
             }
@@ -318,6 +354,7 @@ class ConnectionServiceV2 : Service() {
                 bundle.putInt("modifiers", event.modifiers)
             }
             is ParsedEvent.ControlSwitch -> {
+                Log.e(TAG, ">>> CONTROL_SWITCH event! Edge: ${edgeToString(event.edge)}")
                 bundle.putString("type", "control_switch")
                 bundle.putString("edge", edgeToString(event.edge))
             }
@@ -333,6 +370,7 @@ class ConnectionServiceV2 : Service() {
         }
 
         // Send to InputSimulatorService
+        Log.e(TAG, ">>> Sending broadcast to InputSimulatorService: ${bundle.getString("type")}")
         val intent = Intent(InputSimulatorService.ACTION_PROCESS_INPUT_EVENT).apply {
             setPackage(packageName)
             putExtra(InputSimulatorService.EXTRA_EVENT_DATA, bundle)
@@ -352,6 +390,23 @@ class ConnectionServiceV2 : Service() {
                 outputStream?.flush()
             } catch (e: Exception) {
                 Log.w(TAG, "Failed to send heartbeat ack: ${e.message}")
+            }
+        }
+    }
+
+    private fun sendControlReturn() {
+        // Send control return message to PC so it can release cursor lock
+        serviceScope.launch {
+            try {
+                val message = JSONObject().apply {
+                    put("type", "control_return")
+                    put("timestamp", System.currentTimeMillis())
+                }
+                Log.e(TAG, ">>> Sending control_return to PC: $message")
+                outputStream?.write("$message\n".toByteArray())
+                outputStream?.flush()
+            } catch (e: Exception) {
+                Log.e(TAG, "Failed to send control_return: ${e.message}")
             }
         }
     }

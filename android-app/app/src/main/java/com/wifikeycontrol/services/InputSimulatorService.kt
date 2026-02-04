@@ -48,13 +48,21 @@ class InputSimulatorService : AccessibilityService() {
     private lateinit var protocolHandler: ProtocolHandler
     private val serviceScope = CoroutineScope(Dispatchers.Main + SupervisorJob())
 
+    init {
+        Log.d(TAG, "InputSimulatorService INSTANTIATED")
+    }
+
     // Input event receiver
     private val inputEventReceiver = object : BroadcastReceiver() {
         override fun onReceive(context: Context?, intent: Intent?) {
+            Log.d(TAG, "Received broadcast: ${intent?.action}")
             if (intent?.action == ACTION_PROCESS_INPUT_EVENT) {
                 val eventData = intent.getBundleExtra(EXTRA_EVENT_DATA)
                 if (eventData != null) {
+                    Log.d(TAG, "Processing event: ${eventData.getString("type")}")
                     processInputEvent(eventData)
+                } else {
+                    Log.w(TAG, "Event data bundle is null!")
                 }
             }
         }
@@ -62,16 +70,16 @@ class InputSimulatorService : AccessibilityService() {
 
     override fun onServiceConnected() {
         super.onServiceConnected()
-        Log.d(TAG, "InputSimulatorService connected")
+        Log.d(TAG, "InputSimulatorService connected - registering receiver")
 
         protocolHandler = ProtocolHandler()
         updateScreenDimensions()
 
-        // Register for input events
+        // Register for input events - use EXPORTED since we receive from our own app's other service
         val filter = IntentFilter(ACTION_PROCESS_INPUT_EVENT)
-        ContextCompat.registerReceiver(this, inputEventReceiver, filter, ContextCompat.RECEIVER_NOT_EXPORTED)
+        ContextCompat.registerReceiver(this, inputEventReceiver, filter, ContextCompat.RECEIVER_EXPORTED)
 
-        Log.d(TAG, "InputSimulatorService ready for input simulation")
+        Log.d(TAG, "InputSimulatorService ready - receiver registered for: $ACTION_PROCESS_INPUT_EVENT")
     }
 
     override fun onAccessibilityEvent(event: AccessibilityEvent?) {
@@ -157,22 +165,26 @@ class InputSimulatorService : AccessibilityService() {
         currentCursorX += dx
         currentCursorY += dy
 
-        // Clamp to screen
-        if (currentCursorX < 0) currentCursorX = 0
+        // Clamp to screen (with buffer for edge detection)
+        val leftEdgeBuffer = 5  // Small buffer before triggering return
+        if (currentCursorX < leftEdgeBuffer) currentCursorX = leftEdgeBuffer
         if (currentCursorX > androidScreenWidth) currentCursorX = androidScreenWidth
         if (currentCursorY < 0) currentCursorY = 0
         if (currentCursorY > androidScreenHeight) currentCursorY = androidScreenHeight
 
-        // Check for return to PC (Left Edge)
-        if (currentCursorX <= 0) {
+        // Check for return to PC (Left Edge - when pushed against left edge)
+        if (currentCursorX <= leftEdgeBuffer && dx < 0) {
+            // User is trying to move further left
             returnControlToPC()
             return
         }
 
-        // Update cursor position
+        // Update cursor position - offset by half the cursor size (12dp = ~36px at most densities)
+        // so the icon appears centered on the click point
+        val cursorOffset = 12 * resources.displayMetrics.density
         cursorView?.let {
-            it.translationX = currentCursorX.toFloat()
-            it.translationY = currentCursorY.toFloat()
+            it.translationX = currentCursorX.toFloat() - cursorOffset
+            it.translationY = currentCursorY.toFloat() - cursorOffset
         }
     }
 
@@ -228,6 +240,35 @@ class InputSimulatorService : AccessibilityService() {
             "left", "right", "top", "bottom", "hotkey" -> {
                 // Switch control to Android
                 isControlActive = true
+                
+                // Initialize cursor position based on entry edge
+                when (edge) {
+                    "right" -> {
+                        // Entered from right edge of PC - start cursor at left side of Android
+                        currentCursorX = 50  // Small offset from edge to prevent immediate return
+                        currentCursorY = androidScreenHeight / 2
+                    }
+                    "left" -> {
+                        // Entered from left edge of PC - start cursor at right side
+                        currentCursorX = androidScreenWidth - 50
+                        currentCursorY = androidScreenHeight / 2
+                    }
+                    "top" -> {
+                        currentCursorX = androidScreenWidth / 2
+                        currentCursorY = 50
+                    }
+                    "bottom" -> {
+                        currentCursorX = androidScreenWidth / 2
+                        currentCursorY = androidScreenHeight - 50
+                    }
+                    else -> {
+                        // Hotkey or other - start at center
+                        currentCursorX = androidScreenWidth / 2
+                        currentCursorY = androidScreenHeight / 2
+                    }
+                }
+                
+                Log.e(TAG, ">>> Control activated! Cursor at ($currentCursorX, $currentCursorY)")
                 showControlOverlay()
             }
             "return_to_pc" -> {
@@ -337,7 +378,8 @@ class InputSimulatorService : AccessibilityService() {
                 },
                 WindowManager.LayoutParams.FLAG_NOT_FOCUSABLE or
                         WindowManager.LayoutParams.FLAG_NOT_TOUCHABLE or
-                        WindowManager.LayoutParams.FLAG_LAYOUT_IN_SCREEN,
+                        WindowManager.LayoutParams.FLAG_LAYOUT_IN_SCREEN or
+                        WindowManager.LayoutParams.FLAG_LAYOUT_NO_LIMITS,
                 PixelFormat.TRANSLUCENT
             )
 

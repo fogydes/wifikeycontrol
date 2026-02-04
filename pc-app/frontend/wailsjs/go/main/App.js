@@ -6,8 +6,16 @@ export function ClearLogs() {
   return window['go']['main']['App']['ClearLogs']();
 }
 
+export function EnableUSBMode() {
+  return window['go']['main']['App']['EnableUSBMode']();
+}
+
 export function GetConnectedDevice() {
   return window['go']['main']['App']['GetConnectedDevice']();
+}
+
+export function GetLocalIP() {
+  return window['go']['main']['App']['GetLocalIP']();
 }
 
 export function GetLogs() {

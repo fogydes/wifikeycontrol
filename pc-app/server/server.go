@@ -1,6 +1,7 @@
 package server
 
 import (
+	"bufio"
 	"encoding/binary"
 	"encoding/json"
 	"fmt"
@@ -8,8 +9,9 @@ import (
 	"sync"
 	"time"
 
-	flatbuffers "github.com/google/flatbuffers/go"
 	"pc-app/protocol/wifikeycontrol"
+
+	flatbuffers "github.com/google/flatbuffers/go"
 )
 
 const (
@@ -30,14 +32,15 @@ type Client struct {
 
 // Server manages connections to Android devices
 type Server struct {
-	listener    net.Listener
-	client      *Client
-	clientMu    sync.RWMutex
-	running     bool
-	runMu       sync.Mutex
-	onConnect   func(name string)
-	onDisconnect func()
-	onLog       func(msg string)
+	listener        net.Listener
+	client          *Client
+	clientMu        sync.RWMutex
+	running         bool
+	runMu           sync.Mutex
+	onConnect       func(name string)
+	onDisconnect    func()
+	onLog           func(msg string)
+	onControlReturn func() // Called when Android returns control to PC
 }
 
 // NewServer creates a new server instance
@@ -46,10 +49,11 @@ func NewServer() *Server {
 }
 
 // SetCallbacks sets event callbacks
-func (s *Server) SetCallbacks(onConnect func(string), onDisconnect func(), onLog func(string)) {
+func (s *Server) SetCallbacks(onConnect func(string), onDisconnect func(), onLog func(string), onControlReturn func()) {
 	s.onConnect = onConnect
 	s.onDisconnect = onDisconnect
 	s.onLog = onLog
+	s.onControlReturn = onControlReturn
 }
 
 func (s *Server) log(msg string) {
@@ -184,7 +188,7 @@ func (s *Server) doHandshake(conn net.Conn) (*Client, error) {
 	}
 	helloData, _ := json.Marshal(hello)
 	helloData = append(helloData, '\n')
-	
+
 	conn.SetWriteDeadline(time.Now().Add(5 * time.Second))
 	if _, err := conn.Write(helloData); err != nil {
 		return nil, fmt.Errorf("failed to send hello: %w", err)
@@ -237,9 +241,9 @@ func (s *Server) doHandshake(conn net.Conn) (*Client, error) {
 }
 
 func (s *Server) readLoop(conn net.Conn) {
-	buf := make([]byte, 4096)
+	reader := bufio.NewReader(conn)
 	for {
-		n, err := conn.Read(buf)
+		line, err := reader.ReadBytes('\n')
 		if err != nil {
 			s.log(fmt.Sprintf("Read error: %v", err))
 			return
@@ -251,8 +255,22 @@ func (s *Server) readLoop(conn net.Conn) {
 		}
 		s.clientMu.Unlock()
 
-		// Process incoming messages (heartbeat acks, etc.)
-		_ = n // TODO: parse incoming FlatBuffer messages
+		// Parse incoming JSON messages
+		var msg map[string]interface{}
+		if err := json.Unmarshal(line, &msg); err != nil {
+			continue // Not valid JSON, skip
+		}
+
+		msgType, _ := msg["type"].(string)
+		switch msgType {
+		case "heartbeat_ack":
+			// Just updates LastActive, already done above
+		case "control_return":
+			s.log("Received control_return from Android")
+			if s.onControlReturn != nil {
+				s.onControlReturn()
+			}
+		}
 	}
 }
 
@@ -315,11 +333,11 @@ func (s *Server) SendEvent(builder *flatbuffers.Builder) error {
 	}
 
 	buf := builder.FinishedBytes()
-	
+
 	// Write length prefix (4 bytes, little endian) + data
 	lenBuf := make([]byte, 4)
 	binary.LittleEndian.PutUint32(lenBuf, uint32(len(buf)))
-	
+
 	client.Conn.SetWriteDeadline(time.Now().Add(100 * time.Millisecond))
 	if _, err := client.Conn.Write(lenBuf); err != nil {
 		return err
@@ -327,33 +345,33 @@ func (s *Server) SendEvent(builder *flatbuffers.Builder) error {
 	if _, err := client.Conn.Write(buf); err != nil {
 		return err
 	}
-	
+
 	return nil
 }
 
 // SendHeartbeat sends a heartbeat to the client
 func (s *Server) SendHeartbeat() error {
 	builder := flatbuffers.NewBuilder(64)
-	
+
 	wifikeycontrol.InputEventStart(builder)
 	wifikeycontrol.InputEventAddType(builder, wifikeycontrol.EventTypeHeartbeat)
 	wifikeycontrol.InputEventAddTimestamp(builder, uint64(time.Now().UnixMilli()))
 	event := wifikeycontrol.InputEventEnd(builder)
 	builder.Finish(event)
-	
+
 	return s.SendEvent(builder)
 }
 
 // SendMouseMove sends a relative mouse move event
 func (s *Server) SendMouseMove(dx, dy int16) error {
 	builder := flatbuffers.NewBuilder(128)
-	
+
 	// Create mouse move event
 	wifikeycontrol.MouseMoveEventStart(builder)
 	wifikeycontrol.MouseMoveEventAddDx(builder, dx)
 	wifikeycontrol.MouseMoveEventAddDy(builder, dy)
 	mouseMove := wifikeycontrol.MouseMoveEventEnd(builder)
-	
+
 	// Create input event
 	wifikeycontrol.InputEventStart(builder)
 	wifikeycontrol.InputEventAddType(builder, wifikeycontrol.EventTypeMouseMoveRel)
@@ -361,89 +379,89 @@ func (s *Server) SendMouseMove(dx, dy int16) error {
 	wifikeycontrol.InputEventAddMouseMove(builder, mouseMove)
 	event := wifikeycontrol.InputEventEnd(builder)
 	builder.Finish(event)
-	
+
 	return s.SendEvent(builder)
 }
 
 // SendMouseClick sends a mouse click event
 func (s *Server) SendMouseClick(button wifikeycontrol.MouseButton, pressed bool) error {
 	builder := flatbuffers.NewBuilder(128)
-	
+
 	wifikeycontrol.MouseClickEventStart(builder)
 	wifikeycontrol.MouseClickEventAddButton(builder, button)
 	wifikeycontrol.MouseClickEventAddPressed(builder, pressed)
 	mouseClick := wifikeycontrol.MouseClickEventEnd(builder)
-	
+
 	wifikeycontrol.InputEventStart(builder)
 	wifikeycontrol.InputEventAddType(builder, wifikeycontrol.EventTypeMouseClick)
 	wifikeycontrol.InputEventAddTimestamp(builder, uint64(time.Now().UnixMilli()))
 	wifikeycontrol.InputEventAddMouseClick(builder, mouseClick)
 	event := wifikeycontrol.InputEventEnd(builder)
 	builder.Finish(event)
-	
+
 	return s.SendEvent(builder)
 }
 
 // SendMouseScroll sends a scroll event
 func (s *Server) SendMouseScroll(dx, dy int16) error {
 	builder := flatbuffers.NewBuilder(128)
-	
+
 	wifikeycontrol.MouseScrollEventStart(builder)
 	wifikeycontrol.MouseScrollEventAddDx(builder, dx)
 	wifikeycontrol.MouseScrollEventAddDy(builder, dy)
 	mouseScroll := wifikeycontrol.MouseScrollEventEnd(builder)
-	
+
 	wifikeycontrol.InputEventStart(builder)
 	wifikeycontrol.InputEventAddType(builder, wifikeycontrol.EventTypeMouseScroll)
 	wifikeycontrol.InputEventAddTimestamp(builder, uint64(time.Now().UnixMilli()))
 	wifikeycontrol.InputEventAddMouseScroll(builder, mouseScroll)
 	event := wifikeycontrol.InputEventEnd(builder)
 	builder.Finish(event)
-	
+
 	return s.SendEvent(builder)
 }
 
 // SendKeyPress sends a key event
 func (s *Server) SendKeyPress(keycode int32, key string, modifiers byte, pressed bool) error {
 	builder := flatbuffers.NewBuilder(256)
-	
+
 	keyStr := builder.CreateString(key)
-	
+
 	wifikeycontrol.KeyEventStart(builder)
 	wifikeycontrol.KeyEventAddKeycode(builder, keycode)
 	wifikeycontrol.KeyEventAddKey(builder, keyStr)
 	wifikeycontrol.KeyEventAddModifiers(builder, modifiers)
 	keyEvent := wifikeycontrol.KeyEventEnd(builder)
-	
+
 	eventType := wifikeycontrol.EventTypeKeyPress
 	if !pressed {
 		eventType = wifikeycontrol.EventTypeKeyRelease
 	}
-	
+
 	wifikeycontrol.InputEventStart(builder)
 	wifikeycontrol.InputEventAddType(builder, eventType)
 	wifikeycontrol.InputEventAddTimestamp(builder, uint64(time.Now().UnixMilli()))
 	wifikeycontrol.InputEventAddKey(builder, keyEvent)
 	event := wifikeycontrol.InputEventEnd(builder)
 	builder.Finish(event)
-	
+
 	return s.SendEvent(builder)
 }
 
 // SendControlSwitch sends a control switch event
 func (s *Server) SendControlSwitch(edge wifikeycontrol.Edge) error {
 	builder := flatbuffers.NewBuilder(128)
-	
+
 	wifikeycontrol.ControlSwitchEventStart(builder)
 	wifikeycontrol.ControlSwitchEventAddEdge(builder, edge)
 	controlSwitch := wifikeycontrol.ControlSwitchEventEnd(builder)
-	
+
 	wifikeycontrol.InputEventStart(builder)
 	wifikeycontrol.InputEventAddType(builder, wifikeycontrol.EventTypeControlSwitch)
 	wifikeycontrol.InputEventAddTimestamp(builder, uint64(time.Now().UnixMilli()))
 	wifikeycontrol.InputEventAddControlSwitch(builder, controlSwitch)
 	event := wifikeycontrol.InputEventEnd(builder)
 	builder.Finish(event)
-	
+
 	return s.SendEvent(builder)
 }
