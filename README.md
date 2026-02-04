@@ -1,4 +1,4 @@
-# WiFi Key Control (Refactored)
+# WiFi Key Control
 
 Control your Android phone using your PC's keyboard and mouse with ultra-low latency. This version is a ground-up refactor focusing on performance, maintainability, and a modern tech stack.
 
