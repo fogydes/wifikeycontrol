@@ -1,19 +1,39 @@
-# README
+# WiFi Key Control - PC Application
 
-## About
+The PC server component for WiFi Key Control, built with [Wails v2](https://wails.io).
 
-This is the official Wails Vanilla template.
+## Requirements
 
-You can configure the project by editing `wails.json`. More information about the project settings can be found
-here: https://wails.io/docs/reference/project-config
+- Go 1.21+
+- Wails CLI v2
+- Windows 10/11 (for native input hooks)
 
-## Live Development
+## Development
 
-To run in live development mode, run `wails dev` in the project directory. This will run a Vite development
-server that will provide very fast hot reload of your frontend changes. If you want to develop in a browser
-and have access to your Go methods, there is also a dev server that runs on http://localhost:34115. Connect
-to this in your browser, and you can call your Go code from devtools.
+```powershell
+# Run in development mode with hot reload
+wails dev
+```
+
+The dev server runs at `http://localhost:34115` for browser debugging.
 
 ## Building
 
-To build a redistributable, production mode package, use `wails build`.
+```powershell
+# Build production executable
+wails build
+```
+
+Output: `build/bin/pc-app.exe`
+
+## Architecture
+
+- `app.go` - Main Wails application controller
+- `server/` - TCP server for client connections, UDP for discovery
+- `input/` - Windows low-level keyboard/mouse hooks
+- `protocol/` - FlatBuffers generated Go code
+- `frontend/` - HTML/CSS/JS UI
+
+## Configuration
+
+Edit `wails.json` for project settings. See [Wails documentation](https://wails.io/docs/reference/project-config).
