@@ -211,6 +211,18 @@ func (s *Server) doHandshake(conn net.Conn) (*Client, error) {
 		return nil, fmt.Errorf("unexpected message type: %v", ack["type"])
 	}
 
+	// Validate protocol version
+	const currentVersion = 1
+	clientVersion := 0
+	if v, ok := ack["version"].(float64); ok {
+		clientVersion = int(v)
+	}
+	if clientVersion != currentVersion {
+		s.log(fmt.Sprintf("Warning: Client version mismatch (client: %d, server: %d)", clientVersion, currentVersion))
+		// For now, we allow connection but log the warning
+		// Future versions may reject incompatible clients
+	}
+
 	// Parse screen dimensions
 	screenW, screenH := 1080, 1920
 	if screen, ok := ack["screen"].([]interface{}); ok && len(screen) >= 2 {

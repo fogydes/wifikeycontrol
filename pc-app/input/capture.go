@@ -86,6 +86,26 @@ func (c *Capture) SetCallbacks(onEvent func(InputEvent), onLog func(string)) {
 	c.onLog = onLog
 }
 
+// SetEdgeThreshold sets the edge detection threshold in pixels
+func (c *Capture) SetEdgeThreshold(threshold int) {
+	c.mu.Lock()
+	defer c.mu.Unlock()
+	if threshold < 1 {
+		threshold = 1
+	}
+	if threshold > 50 {
+		threshold = 50
+	}
+	c.edgeThreshold = threshold
+}
+
+// GetEdgeThreshold returns the current edge detection threshold
+func (c *Capture) GetEdgeThreshold() int {
+	c.mu.Lock()
+	defer c.mu.Unlock()
+	return c.edgeThreshold
+}
+
 func (c *Capture) log(msg string) {
 	if c.onLog != nil {
 		c.onLog(msg)

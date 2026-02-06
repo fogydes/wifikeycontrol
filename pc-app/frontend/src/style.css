@@ -214,12 +214,105 @@ body {
   color: var(--success);
 }
 
-.log-entry.warning {
+.log-entry.warning,
+.log-entry.warn {
   color: var(--warning);
 }
 
 .log-entry.error {
   color: var(--danger);
+}
+
+/* Discovered Devices */
+.discovered-devices {
+  background: var(--bg-secondary);
+  border: 1px solid var(--border);
+  border-radius: var(--radius);
+  padding: 12px 16px;
+}
+
+.discovered-devices h3 {
+  font-size: 12px;
+  font-weight: 500;
+  color: var(--text-secondary);
+  text-transform: uppercase;
+  letter-spacing: 0.5px;
+  margin-bottom: 8px;
+}
+
+.device-list {
+  display: flex;
+  flex-direction: column;
+  gap: 4px;
+}
+
+.device-item {
+  display: flex;
+  justify-content: space-between;
+  align-items: center;
+  padding: 8px 12px;
+  background: var(--bg-elevated);
+  border-radius: 4px;
+  cursor: pointer;
+  transition: background 0.15s;
+}
+
+.device-item:hover {
+  background: var(--border);
+}
+
+.device-ip {
+  font-size: 11px;
+  color: var(--text-secondary);
+  font-family: "JetBrains Mono", "Fira Code", monospace;
+}
+
+/* Settings Section */
+.settings-section {
+  background: var(--bg-secondary);
+  border: 1px solid var(--border);
+  border-radius: var(--radius);
+  padding: 12px 16px;
+}
+
+.settings-section h3 {
+  font-size: 12px;
+  font-weight: 500;
+  color: var(--text-secondary);
+  text-transform: uppercase;
+  letter-spacing: 0.5px;
+  margin-bottom: 12px;
+}
+
+.setting-row {
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+  gap: 16px;
+}
+
+.setting-row label {
+  font-size: 13px;
+  min-width: 150px;
+}
+
+.setting-row input[type="range"] {
+  flex: 1;
+  height: 4px;
+  -webkit-appearance: none;
+  background: var(--border);
+  border-radius: 2px;
+  cursor: pointer;
+}
+
+.setting-row input[type="range"]::-webkit-slider-thumb {
+  -webkit-appearance: none;
+  appearance: none;
+  width: 16px;
+  height: 16px;
+  background: var(--accent);
+  border-radius: 50%;
+  cursor: pointer;
 }
 
 /* Footer Status Bar */

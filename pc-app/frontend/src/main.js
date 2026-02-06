@@ -9,6 +9,8 @@ let deviceName = "";
 let controlling = false;
 let logs = [];
 let localIP = "Loading...";
+let discoveredDevices = [];
+let edgeThreshold = 5;
 
 // Render the app
 function render() {
@@ -36,6 +38,24 @@ function render() {
             </div>
         </div>
 
+        ${
+          discoveredDevices.length > 0
+            ? `
+        <div class="discovered-devices">
+            <h3>Discovered Devices</h3>
+            <div class="device-list">
+                ${discoveredDevices
+                  .map(
+                    (d) =>
+                      `<div class="device-item">${escapeHtml(d.name)} <span class="device-ip">${d.ip}</span></div>`,
+                  )
+                  .join("")}
+            </div>
+        </div>
+        `
+            : ""
+        }
+
         <div class="controls">
             ${
               !serverRunning
@@ -50,6 +70,14 @@ function render() {
             }
         </div>
 
+        <div class="settings-section">
+            <h3>Settings</h3>
+            <div class="setting-row">
+                <label for="edgeThreshold">Edge Threshold: ${edgeThreshold}px</label>
+                <input type="range" id="edgeThreshold" min="1" max="50" value="${edgeThreshold}" />
+            </div>
+        </div>
+
         <div class="log-panel">
             <div class="log-header">
                 <h3>Activity Log</h3>
@@ -59,12 +87,7 @@ function render() {
                 ${
                   logs.length === 0
                     ? '<div class="log-entry">No activity yet. Start the server to begin.</div>'
-                    : logs
-                        .map(
-                          (log) =>
-                            `<div class="log-entry info">${escapeHtml(log)}</div>`,
-                        )
-                        .join("")
+                    : logs.map((log) => formatLogEntry(log)).join("")
                 }
             </div>
         </div>
@@ -85,12 +108,28 @@ function render() {
   }
 }
 
+function formatLogEntry(log) {
+  let level = "info";
+  const lowerLog = log.toLowerCase();
+  if (
+    lowerLog.includes("error") ||
+    lowerLog.includes("failed") ||
+    lowerLog.includes("disconnect")
+  ) {
+    level = "error";
+  } else if (lowerLog.includes("warn") || lowerLog.includes("warning")) {
+    level = "warn";
+  }
+  return `<div class="log-entry ${level}">${escapeHtml(log)}</div>`;
+}
+
 function attachEventHandlers() {
   const startBtn = document.getElementById("startBtn");
   const stopBtn = document.getElementById("stopBtn");
   const returnBtn = document.getElementById("returnBtn");
   const clearLogsBtn = document.getElementById("clearLogsBtn");
   const usbModeBtn = document.getElementById("usbModeBtn");
+  const edgeThresholdInput = document.getElementById("edgeThreshold");
 
   if (startBtn) {
     startBtn.addEventListener("click", async () => {
@@ -112,6 +151,7 @@ function attachEventHandlers() {
         serverRunning = false;
         connected = false;
         controlling = false;
+        discoveredDevices = [];
         addLog("Server stopped");
         render();
       } catch (err) {
@@ -149,6 +189,23 @@ function attachEventHandlers() {
       }
     });
   }
+
+  if (edgeThresholdInput) {
+    edgeThresholdInput.addEventListener("input", async (e) => {
+      edgeThreshold = parseInt(e.target.value);
+      // Update label in real-time
+      const label = document.querySelector('label[for="edgeThreshold"]');
+      if (label) label.textContent = `Edge Threshold: ${edgeThreshold}px`;
+    });
+    edgeThresholdInput.addEventListener("change", async (e) => {
+      edgeThreshold = parseInt(e.target.value);
+      try {
+        await App.SetEdgeThreshold(edgeThreshold);
+      } catch (err) {
+        addLog("Failed to set edge threshold: " + err);
+      }
+    });
+  }
 }
 
 function addLog(msg) {
@@ -175,6 +232,7 @@ EventsOn("server:stopped", () => {
   serverRunning = false;
   connected = false;
   controlling = false;
+  discoveredDevices = [];
   render();
 });
 
@@ -193,6 +251,16 @@ EventsOn("device:disconnected", () => {
   render();
 });
 
+EventsOn("device:discovered", (data) => {
+  // Add to discovered devices if not already present
+  const existing = discoveredDevices.find((d) => d.ip === data.ip);
+  if (!existing) {
+    discoveredDevices.push({ ip: data.ip, name: data.name });
+    addLog(`Discovered: ${data.name} (${data.ip})`);
+    render();
+  }
+});
+
 EventsOn("control:switched", (edge) => {
   if (edge === "return_to_pc") {
     controlling = false;
@@ -201,6 +269,12 @@ EventsOn("control:switched", (edge) => {
     controlling = true;
     addLog(`Control switched to Android (edge: ${edge})`);
   }
+  render();
+});
+
+EventsOn("control:returned", () => {
+  controlling = false;
+  addLog("Control returned from Android");
   render();
 });
 
@@ -218,6 +292,7 @@ render();
     serverRunning = await App.IsServerRunning();
     connected = await App.IsConnected();
     localIP = await App.GetLocalIP();
+    edgeThreshold = await App.GetEdgeThreshold();
     if (connected) {
       deviceName = await App.GetConnectedDevice();
       controlling = await App.IsControllingAndroid();

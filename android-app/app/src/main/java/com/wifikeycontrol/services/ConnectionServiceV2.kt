@@ -92,7 +92,7 @@ class ConnectionServiceV2 : Service() {
     private val controlReturnReceiver = object : BroadcastReceiver() {
         override fun onReceive(context: Context?, intent: Intent?) {
             if (intent?.action == ACTION_SEND_CONTROL_RETURN) {
-                Log.e(TAG, ">>> Received CONTROL_RETURN request - sending to PC")
+                Log.d(TAG, ">>> Received CONTROL_RETURN request - sending to PC")
                 sendControlReturn()
             }
         }
@@ -287,7 +287,7 @@ class ConnectionServiceV2 : Service() {
                         break
                     }
 
-                    Log.e(TAG, ">>> Received $bytesRead bytes from server")
+                    Log.d(TAG, ">>> Received $bytesRead bytes from server")
                     buffer.write(readBuffer, 0, bytesRead)
                     
                     // Process complete messages
@@ -297,13 +297,13 @@ class ConnectionServiceV2 : Service() {
                     while (true) {
                         val result = protocolHandler.tryReadMessage(data, offset)
                         if (result == null) {
-                            Log.e(TAG, ">>> tryReadMessage returned null (incomplete message)")
+                            Log.d(TAG, ">>> tryReadMessage returned null (incomplete message)")
                             break
                         }
                         
                         val (event, consumed) = result
                         offset += consumed
-                        Log.e(TAG, ">>> Parsed event: $event, consumed $consumed bytes")
+                        Log.d(TAG, ">>> Parsed event: $event, consumed $consumed bytes")
                         
                         if (event != null) {
                             processEvent(event)
@@ -328,7 +328,7 @@ class ConnectionServiceV2 : Service() {
      * Process a parsed FlatBuffer event.
      */
     private fun processEvent(event: ParsedEvent) {
-        Log.e(TAG, ">>> processEvent called with: $event")
+        Log.d(TAG, ">>> processEvent called with: $event")
         val bundle = Bundle()
         
         when (event) {
@@ -354,7 +354,7 @@ class ConnectionServiceV2 : Service() {
                 bundle.putInt("modifiers", event.modifiers)
             }
             is ParsedEvent.ControlSwitch -> {
-                Log.e(TAG, ">>> CONTROL_SWITCH event! Edge: ${edgeToString(event.edge)}")
+                Log.d(TAG, ">>> CONTROL_SWITCH event! Edge: ${edgeToString(event.edge)}")
                 bundle.putString("type", "control_switch")
                 bundle.putString("edge", edgeToString(event.edge))
             }
@@ -370,7 +370,7 @@ class ConnectionServiceV2 : Service() {
         }
 
         // Send to InputSimulatorService
-        Log.e(TAG, ">>> Sending broadcast to InputSimulatorService: ${bundle.getString("type")}")
+        Log.d(TAG, ">>> Sending broadcast to InputSimulatorService: ${bundle.getString("type")}")
         val intent = Intent(InputSimulatorService.ACTION_PROCESS_INPUT_EVENT).apply {
             setPackage(packageName)
             putExtra(InputSimulatorService.EXTRA_EVENT_DATA, bundle)
@@ -402,7 +402,7 @@ class ConnectionServiceV2 : Service() {
                     put("type", "control_return")
                     put("timestamp", System.currentTimeMillis())
                 }
-                Log.e(TAG, ">>> Sending control_return to PC: $message")
+                Log.d(TAG, ">>> Sending control_return to PC: $message")
                 outputStream?.write("$message\n".toByteArray())
                 outputStream?.flush()
             } catch (e: Exception) {

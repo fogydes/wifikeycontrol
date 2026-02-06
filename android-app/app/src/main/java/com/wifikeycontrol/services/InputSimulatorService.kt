@@ -268,7 +268,7 @@ class InputSimulatorService : AccessibilityService() {
                     }
                 }
                 
-                Log.e(TAG, ">>> Control activated! Cursor at ($currentCursorX, $currentCursorY)")
+                Log.d(TAG, ">>> Control activated! Cursor at ($currentCursorX, $currentCursorY)")
                 showControlOverlay()
             }
             "return_to_pc" -> {

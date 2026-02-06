@@ -40,6 +40,8 @@ class KeyboardService : InputMethodService() {
             "end" to KeyEvent.KEYCODE_MOVE_END,
             "page_up" to KeyEvent.KEYCODE_PAGE_UP,
             "page_down" to KeyEvent.KEYCODE_PAGE_DOWN,
+            "pageup" to KeyEvent.KEYCODE_PAGE_UP,      // Alternate naming
+            "pagedown" to KeyEvent.KEYCODE_PAGE_DOWN,  // Alternate naming
             "up" to KeyEvent.KEYCODE_DPAD_UP,
             "down" to KeyEvent.KEYCODE_DPAD_DOWN,
             "left" to KeyEvent.KEYCODE_DPAD_LEFT,

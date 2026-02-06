@@ -7,6 +7,8 @@ export function EnableUSBMode():Promise<void>;
 
 export function GetConnectedDevice():Promise<string>;
 
+export function GetEdgeThreshold():Promise<number>;
+
 export function GetLocalIP():Promise<string>;
 
 export function GetLogs():Promise<Array<string>>;
@@ -20,6 +22,8 @@ export function IsControllingAndroid():Promise<boolean>;
 export function IsServerRunning():Promise<boolean>;
 
 export function ReturnToPC():Promise<void>;
+
+export function SetEdgeThreshold(arg1:number):Promise<void>;
 
 export function StartCapture():Promise<void>;
 

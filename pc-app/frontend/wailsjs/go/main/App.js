@@ -14,6 +14,10 @@ export function GetConnectedDevice() {
   return window['go']['main']['App']['GetConnectedDevice']();
 }
 
+export function GetEdgeThreshold() {
+  return window['go']['main']['App']['GetEdgeThreshold']();
+}
+
 export function GetLocalIP() {
   return window['go']['main']['App']['GetLocalIP']();
 }
@@ -40,6 +44,10 @@ export function IsServerRunning() {
 
 export function ReturnToPC() {
   return window['go']['main']['App']['ReturnToPC']();
+}
+
+export function SetEdgeThreshold(arg1) {
+  return window['go']['main']['App']['SetEdgeThreshold'](arg1);
 }
 
 export function StartCapture() {

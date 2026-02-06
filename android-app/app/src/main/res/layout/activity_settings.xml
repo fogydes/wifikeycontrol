@@ -1,25 +1,140 @@
 <?xml version="1.0" encoding="utf-8"?>
-<LinearLayout xmlns:android="http://schemas.android.com/apk/res/android"
+<ScrollView xmlns:android="http://schemas.android.com/apk/res/android"
     android:layout_width="match_parent"
     android:layout_height="match_parent"
-    android:orientation="vertical"
-    android:padding="16dp">
+    android:fillViewport="true">
 
-    <TextView
+    <LinearLayout
         android:layout_width="match_parent"
         android:layout_height="wrap_content"
-        android:text="Settings"
-        android:textSize="24sp"
-        android:textStyle="bold"
-        android:gravity="center"
-        android:layout_marginBottom="24dp" />
+        android:orientation="vertical"
+        android:padding="16dp">
 
-    <TextView
-        android:layout_width="match_parent"
-        android:layout_height="wrap_content"
-        android:text="Settings will be implemented in Phase 3"
-        android:textSize="16sp"
-        android:gravity="center"
-        android:layout_marginTop="32dp" />
+        <!-- Connection Settings -->
+        <TextView
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:text="Connection"
+            android:textSize="14sp"
+            android:textStyle="bold"
+            android:textColor="?android:textColorSecondary"
+            android:layout_marginBottom="8dp" />
 
-</LinearLayout>
+        <com.google.android.material.textfield.TextInputLayout
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:hint="Server IP Address"
+            android:layout_marginBottom="8dp">
+            
+            <com.google.android.material.textfield.TextInputEditText
+                android:id="@+id/serverIpInput"
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content"
+                android:inputType="text"
+                android:singleLine="true" />
+        </com.google.android.material.textfield.TextInputLayout>
+
+        <com.google.android.material.textfield.TextInputLayout
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:hint="Server Port"
+            android:layout_marginBottom="16dp">
+            
+            <com.google.android.material.textfield.TextInputEditText
+                android:id="@+id/serverPortInput"
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content"
+                android:inputType="number"
+                android:singleLine="true" />
+        </com.google.android.material.textfield.TextInputLayout>
+
+        <!-- Behavior Settings -->
+        <TextView
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:text="Behavior"
+            android:textSize="14sp"
+            android:textStyle="bold"
+            android:textColor="?android:textColorSecondary"
+            android:layout_marginTop="8dp"
+            android:layout_marginBottom="8dp" />
+
+        <LinearLayout
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:orientation="horizontal"
+            android:gravity="center_vertical"
+            android:layout_marginBottom="12dp">
+
+            <TextView
+                android:layout_width="0dp"
+                android:layout_height="wrap_content"
+                android:layout_weight="1"
+                android:text="Auto-connect on launch"
+                android:textSize="16sp" />
+
+            <Switch
+                android:id="@+id/autoConnectSwitch"
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content" />
+        </LinearLayout>
+
+        <LinearLayout
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:orientation="horizontal"
+            android:gravity="center_vertical"
+            android:layout_marginBottom="16dp">
+
+            <TextView
+                android:layout_width="0dp"
+                android:layout_height="wrap_content"
+                android:layout_weight="1"
+                android:text="Keep screen on"
+                android:textSize="16sp" />
+
+            <Switch
+                android:id="@+id/keepScreenOnSwitch"
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content" />
+        </LinearLayout>
+
+        <!-- Permissions -->
+        <TextView
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:text="Permissions"
+            android:textSize="14sp"
+            android:textStyle="bold"
+            android:textColor="?android:textColorSecondary"
+            android:layout_marginTop="8dp"
+            android:layout_marginBottom="8dp" />
+
+        <Button
+            android:id="@+id/accessibilitySettingsBtn"
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:text="Open Accessibility Settings"
+            style="?android:attr/buttonBarButtonStyle"
+            android:gravity="start|center_vertical"
+            android:layout_marginBottom="4dp" />
+
+        <Button
+            android:id="@+id/keyboardSettingsBtn"
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:text="Open Keyboard Settings"
+            style="?android:attr/buttonBarButtonStyle"
+            android:gravity="start|center_vertical"
+            android:layout_marginBottom="24dp" />
+
+        <!-- Save Button -->
+        <Button
+            android:id="@+id/saveButton"
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:text="Save Settings"
+            android:backgroundTint="@color/design_default_color_primary" />
+
+    </LinearLayout>
+</ScrollView>

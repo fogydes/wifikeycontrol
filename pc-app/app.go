@@ -175,6 +175,17 @@ func (a *App) ReturnToPC() {
 	a.capture.ReturnToPC()
 }
 
+// SetEdgeThreshold sets the edge detection threshold (1-50 pixels)
+func (a *App) SetEdgeThreshold(threshold int) {
+	a.capture.SetEdgeThreshold(threshold)
+	a.addLog(fmt.Sprintf("Edge threshold set to %d pixels", threshold))
+}
+
+// GetEdgeThreshold returns the current edge threshold
+func (a *App) GetEdgeThreshold() int {
+	return a.capture.GetEdgeThreshold()
+}
+
 // ============================================
 // Logs
 // ============================================
